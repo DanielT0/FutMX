@@ -1,24 +1,131 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import './interfazRegistroJugador.dart';
+import './Widgets/Inputs.dart';
+import './Widgets/optionInterfazRegistro.dart';
+import './Widgets/buttonSolicitud.dart';
 
 class interfazRegistro extends StatefulWidget {
+  //StatefulWidget: Permite el cambio de elementos de los widgets
   @override
   _interfazRegistroState createState() => _interfazRegistroState();
 }
 
 class _interfazRegistroState extends State<interfazRegistro> {
-  TextEditingController controllerCedula = new TextEditingController();
-  TextEditingController controllerNombre = new TextEditingController();
-  TextEditingController controllerNombreEquipo = new TextEditingController();
-  TextEditingController controllerContrase = new TextEditingController();
-  TextEditingController controllerConContrase = new TextEditingController();
+  //State: determina el estado en que se encuentran los widgets
+  static TextEditingController controllerCedula =
+      new TextEditingController(); // Maneja los datos ingresados por el input de Cedula
+  static TextEditingController controllerNombre = new TextEditingController();
+  static TextEditingController controllerNombreEquipo =
+      new TextEditingController();
+  static TextEditingController controllerContrase = new TextEditingController();
+  static TextEditingController controllerConContrase =
+      new TextEditingController();
 
-  Future anadirAdministradorCentral() async {
-    String url =
-        'https://futmxpr.000webhostapp.com/insertSolicitudAdminEquipo.php';
+  static TextEditingController controllerIDEquipo = new TextEditingController();
+
+/**  Y... vamos con las listas, guardan información que varía en widgets que pueden reutilizarse (ahorrando gran parte de código)
+ * por ejemplo, las entradas de texto y los botones, que al ser formularios comparten muchas cosas en común, cambiando sólo algunas cosas (como funciones o textos)
+*/
+
+  var opcion = 0;
+  var url = 'https://futmxpr.000webhostapp.com/insertSolicitudAdminEquipo.php';
+  final _inputsText = [
+    {
+      'buttonSubmit': 'Enviar solicitud', //texto que aparecerá en el botón
+      'inputsText': [
+        //Lista de inputs que aparecerá en cada interfaz
+        {
+          'text': 'Cedula', //Texto del input
+          'controller':
+              controllerCedula, //controlador que maneja los datos ingresados
+          'keyBoardType': TextInputType.number, //Tipo de texto ingresado
+          'obscureText': false, //obscureText ... Para contraseñas
+        },
+        {
+          'text': 'Nombre',
+          'controller': controllerNombre,
+          'keyBoardType': TextInputType.text,
+          'obscureText': false,
+        },
+        {
+          'text': 'NombreEquipo',
+          'controller': controllerNombreEquipo,
+          'keyBoardType': TextInputType.text,
+          'obscureText': false,
+        },
+        {
+          'text': 'Contraseña',
+          'controller': controllerContrase,
+          'keyBoardType': TextInputType.text,
+          'obscureText': true,
+        },
+        {
+          'text': 'Confirmar Contraseña',
+          'controller': controllerConContrase,
+          'keyBoardType': TextInputType.text,
+          'obscureText': true,
+        }
+      ]
+    },
+    {
+      'buttonSubmit': 'Enviar solicitud',
+      'inputsText': [
+        {
+          'text': 'Cedula',
+          'controller': controllerCedula,
+          'keyBoardType': TextInputType.number,
+          'obscureText': false,
+        },
+        {
+          'text': 'Nombre',
+          'controller': controllerNombre,
+          'keyBoardType': TextInputType.text,
+          'obscureText': false,
+        },
+        {
+          'text': 'ID Equipo',
+          'controller': controllerIDEquipo,
+          'keyBoardType': TextInputType.number,
+          'obscureText': false,
+        },
+        {
+          'text': 'Contraseña',
+          'controller': controllerContrase,
+          'keyBoardType': TextInputType.text,
+          'obscureText': true,
+        },
+        {
+          'text': 'Confirmar Contraseña',
+          'controller': controllerConContrase,
+          'keyBoardType': TextInputType.text,
+          'obscureText': true,
+        }
+      ]
+    }
+  ];
+
+  void _presionaOpcion(int option) {
+    setState(() {
+      this.opcion = option;
+      option == 0
+          ? this.url =
+              'https://futmxpr.000webhostapp.com/insertSolicitudAdminEquipo.php' // Sentencia ? : (reemplaza el if else)
+          : this.url =
+              'https://futmxpr.000webhostapp.com/app/insertSolicitudJugador.php';
+    });
+  }
+
+  void enviarSolicitud() {
+    this.opcion == 0 ? this.anadirAdministradorEquipo() : this.anadirJugador();
+  }
+
+/** Para entender este método se debe tener en cuenta que Flutter ejecuta los métodos apenas se "construye" la página
+   pero no queremos esto con un método que introduce variables a la base de datos, por lo tanto ponemos Future,
+   así flutter sabrá que es un método que será llamado después (el cual es asincrono)
+*/
+  Future anadirAdministradorEquipo() async {
     // make POST request
-    http.Response response = await http.post(url, body: {
+    http.Response response = await http.post(this.url, body: {
       "Cedula": controllerCedula.text,
       "Nombre": controllerNombre.text,
       "NombreEquipo": controllerNombreEquipo.text,
@@ -32,206 +139,45 @@ class _interfazRegistroState extends State<interfazRegistro> {
     print(body);
   }
 
+  Future anadirJugador() async {
+    // make POST request
+    http.Response response = await http.post(this.url, body: {
+      "Cedula": controllerCedula.text,
+      "Nombre": controllerNombre.text,
+      "Equipo": controllerIDEquipo.text,
+      "Contraseña": controllerContrase.text
+    });
+    // check the status code for the result
+    int statusCode = response.statusCode;
+    // this API passes back the id of the new item added to the body
+    String body = response.body;
+    print(statusCode);
+    print(body);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Registrarse')),
-        body: Padding(
-            padding: const EdgeInsets.all(20),
-            child: ListView(
+      appBar: AppBar(title: Text('Registrarse')),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: ListView(
+          children: <Widget>[
+            Column(
               children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    ButtonBar(
-                      children: <Widget>[
-                        OutlineButton(
-                          onPressed: null,
-                          child: Text('Administrador de equipo'),
-                        ),
-                        OutlineButton(
-                          onPressed: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  new interfazRegistroJugador(),
-                            ),
-                          ),
-                          child: Text('Jugador'),
-                          textColor: Colors.green,
-                          color: Colors.green,
-                        ),
-                        Align(alignment: Alignment.centerLeft),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      height: 45,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Material(
-                        child: TextField(
-                          controller: controllerCedula,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                              fillColor: Colors.grey[200],
-                              filled: true,
-                              hintText: 'Cédula',
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                  )),
-                              enabled: true,
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  borderSide: BorderSide(
-                                    color: Colors.green,
-                                  ))),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 23),
-                    Container(
-                      height: 45,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Material(
-                        child: TextField(
-                          controller: controllerNombre,
-                          decoration: InputDecoration(
-                              fillColor: Colors.grey[200],
-                              filled: true,
-                              hintText: 'Nombre de usuario',
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                  )),
-                              enabled: true,
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  borderSide: BorderSide(
-                                    color: Colors.green,
-                                  ))),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 23),
-                    Container(
-                      height: 45,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Material(
-                        child: TextField(
-                          controller: controllerNombreEquipo,
-                          decoration: InputDecoration(
-                              fillColor: Colors.grey[200],
-                              filled: true,
-                              hintText: 'Nombre del equipo',
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                  )),
-                              enabled: true,
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  borderSide: BorderSide(
-                                    color: Colors.green,
-                                  ))),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 23),
-                    Container(
-                      height: 45,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Material(
-                        child: TextField(
-                          obscureText: true,
-                          controller: controllerContrase,
-                          decoration: InputDecoration(
-                              fillColor: Colors.grey[200],
-                              filled: true,
-                              hintText: 'Contraseña',
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                  )),
-                              enabled: true,
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  borderSide: BorderSide(
-                                    color: Colors.green,
-                                  ))),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 23),
-                    Container(
-                      height: 45,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Material(
-                        child: TextField(
-                          obscureText: true,
-                          controller: controllerConContrase,
-                          decoration: InputDecoration(
-                              fillColor: Colors.grey[200],
-                              filled: true,
-                              hintText: 'Confirmar contraseña',
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                  )),
-                              enabled: true,
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  borderSide: BorderSide(
-                                    color: Colors.green,
-                                  ))),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 90),
-                  child: RaisedButton(
-                    onPressed: anadirAdministradorCentral,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      'Enviar solicitud',
-                    ),
-                    textColor: Colors.white,
-                    color: Colors.green,
-                  ),
-                )
+                optionInterfazRegistro(_presionaOpcion, opcion),
+                ...(_inputsText[opcion]['inputsText']
+                        as List<Map<String, Object>>)
+                    .map((input) {
+                  return Inputs(input['text'], input['controller'],
+                      input['keyBoardType'], input['obscureText']);
+                }).toList()
               ],
-            )));
+            ),
+            buttonSolicitud(enviarSolicitud)
+          ],
+        ),
+      ),
+    );
   }
 }

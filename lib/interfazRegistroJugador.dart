@@ -9,6 +9,8 @@ class interfazRegistroJugador extends StatefulWidget {
 }
 
 class _interfazRegistroJugadorState extends State<interfazRegistroJugador> {
+  
+
   TextEditingController controllerCedula = new TextEditingController();
   TextEditingController controllerNombre = new TextEditingController();
   TextEditingController controllerIDEquipo = new TextEditingController();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import './interfazRegistro.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:prueba_bd/interfazRegistro.dart';
 
@@ -30,6 +30,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _current = 0;
+  List imgList = [
+    'assets/jugador.jpg',
+    'assets/ball.jpg',
+    'assets/play.jpg',
+  ];
+
+  List<T> mapFunction<T>(List list, Function handler) {
+    //Funcion que recibe lista y otra función (basada en elementos) para ser ejecutada periodicamente con ellos (los circulitos)
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,91 +68,96 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.only(left: 30, right: 30, top: 20),
+              padding: EdgeInsets.only(left: 10, right: 10, top: 30),
               child: Column(
                 children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    height: 300,
-                    child: Image.asset(
-                      'assets/jugador.jpg',
-                      fit: BoxFit.cover,
-                    ),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(40),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(0, 15),
-                            blurRadius: 15,
-                          ),
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(0, -10),
-                            blurRadius: 15,
-                          ),
-                        ]),
+                  CarouselSlider(
+                    height: 320,
+                    initialPage: 0,
+                    enlargeCenterPage: true,
+                    autoPlay: true,
+                    reverse: false,
+                    autoPlayInterval: Duration(seconds: 8),
+                    autoPlayAnimationDuration: Duration(milliseconds: 2000),
+                    scrollDirection: Axis.horizontal,
+                    onPageChanged: (index) {
+                      setState(() {
+                        this._current = index;
+                      });
+                    },
+                    items: imgList.map((img) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return (Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            child: Image.asset(
+                              img,
+                              fit: BoxFit.cover,
+                            ),
+                          ));
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: mapFunction<Widget>(imgList, (index, img) {
+                      return Container(
+                        height: 10,
+                        width: 10,
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _current == index
+                              ? Colors.grey[500]
+                              : Colors.grey[200],
+                        ),
+                      );
+                    }),
+                  ),
+                  SizedBox(
+                    height: 15,
                   ),
                   Container(
                     width: 270,
-                    height: 90,
-                    padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
-                    child: Material(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.green,
-                      child: GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new interfazRegistro(),
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Ingresar',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
+                    height: 45,
+                    child: RaisedButton(
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              new interfazRegistro(),
                         ),
                       ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        'Iniciar sesión',
+                      ),
+                      textColor: Colors.white,
+                      color: Colors.green,
                     ),
                   ),
                   SizedBox(
-                    height: 16,
+                    height: 5,
                   ),
-                  Container(
-                    width: 270,
-                    height: 35,
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                        style: BorderStyle.solid,
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new interfazRegistro(),
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Registrarse',
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                  FlatButton(
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            new interfazRegistro(),
                       ),
                     ),
+                    child: Text(
+                      'Registrarse',
+                      style: TextStyle(decoration: TextDecoration.underline),
+                    ),
+                    textColor: Colors.green,
                   ),
                 ],
               ),
