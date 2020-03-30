@@ -29,6 +29,8 @@ class _interfazRegistroState extends State<interfazRegistro> {
 
   var opcion = 0;
   var url = 'https://futmxpr.000webhostapp.com/insertSolicitudAdminEquipo.php';
+  final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _inputsText = [
     {
       'buttonSubmit': 'Enviar solicitud', //texto que aparecerá en el botón
@@ -115,15 +117,30 @@ class _interfazRegistroState extends State<interfazRegistro> {
     });
   }
 
-  void enviarSolicitud() {
-    this.opcion == 0 ? this.anadirAdministradorEquipo() : this.anadirJugador();
+  void enviarSolicitud(BuildContext context) {
+    if (controllerConContrase.text != controllerContrase.text) {
+      print('Las contraseñas no coinciden');
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('Las contraseñas no coinciden'),
+        backgroundColor: Colors.red,
+      ));
+    }
+    // Validate devolverá true si el formulario es válido, o false si
+    // el formulario no es válido.
+    else if (_formKey.currentState.validate()) {
+      // Si el formulario es válido, muestre un snackbar. En el mundo real, a menudo
+      // desea llamar a un servidor o guardar la información en una base de datos
+      this.opcion == 0
+          ? this.anadirAdministradorEquipo(context)
+          : this.anadirJugador(context);
+    }
   }
 
 /** Para entender este método se debe tener en cuenta que Flutter ejecuta los métodos apenas se "construye" la página
    pero no queremos esto con un método que introduce variables a la base de datos, por lo tanto ponemos Future,
    así flutter sabrá que es un método que será llamado después (el cual es asincrono)
 */
-  Future anadirAdministradorEquipo() async {
+  Future anadirAdministradorEquipo(BuildContext context) async {
     // make POST request
     http.Response response = await http.post(this.url, body: {
       "Cedula": controllerCedula.text,
@@ -137,9 +154,21 @@ class _interfazRegistroState extends State<interfazRegistro> {
     String body = response.body;
     print(statusCode);
     print(body);
+    if(body!=""){
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('Ya existe una solicitud de este usuario'),
+        backgroundColor: Colors.red,
+      ));
+    }
+    else{
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('Solicitud enviada'),
+        backgroundColor: Colors.green,
+      ));
+    }
   }
 
-  Future anadirJugador() async {
+  Future anadirJugador(BuildContext context) async {
     // make POST request
     http.Response response = await http.post(this.url, body: {
       "Cedula": controllerCedula.text,
@@ -153,31 +182,53 @@ class _interfazRegistroState extends State<interfazRegistro> {
     String body = response.body;
     print(statusCode);
     print(body);
+    if(body!=""){
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('Ya existe una solicitud de este usuario'),
+        backgroundColor: Colors.red,
+      ));
+    }
+    else{
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('Solicitud enviada'),
+        backgroundColor: Colors.green,
+      ));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(title: Text('Registrarse')),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: ListView(
-          children: <Widget>[
-            Column(
+      body: Builder(builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Form(
+            key: _formKey,
+            child: ListView(
               children: <Widget>[
-                optionInterfazRegistro(_presionaOpcion, opcion),
-                ...(_inputsText[opcion]['inputsText']
-                        as List<Map<String, Object>>)
-                    .map((input) {
-                  return Inputs(input['text'], input['controller'],
-                      input['keyBoardType'], input['obscureText']);
-                }).toList()
+                Column(
+                  children: <Widget>[
+                    optionInterfazRegistro(_presionaOpcion, opcion),
+                    ...(_inputsText[opcion]['inputsText']
+                            as List<Map<String, Object>>)
+                        .map((input) {
+                      return Inputs(
+                          input['text'],
+                          input['controller'],
+                          input['keyBoardType'],
+                          input['obscureText']); //Inputs con parámetros
+                    }).toList()
+                  ],
+                ),
+                buttonSolicitud(() => enviarSolicitud(
+                    context)) //Llama al botón asignandole un método (función)
               ],
             ),
-            buttonSolicitud(enviarSolicitud)
-          ],
-        ),
-      ),
+          ),
+        );
+      }),
     );
   }
 }
