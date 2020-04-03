@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prueba_bd/interfazInicioSesion.dart';
 import './interfazRegistro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -130,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              new interfazRegistro(),
+                              new interfazInicioSesion(),
                         ),
                       ),
                       shape: RoundedRectangleBorder(

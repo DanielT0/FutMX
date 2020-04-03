@@ -111,9 +111,9 @@ class _interfazRegistroState extends State<interfazRegistro> {
       this.opcion = option;
       option == 0
           ? this.url =
-              'https://futmxpr.000webhostapp.com/insertSolicitudAdminEquipo.php' // Sentencia ? : (reemplaza el if else)
+              'https://futmxpr.000webhostapp.com/app/insertSolicitudAdminEquipo.php' // Sentencia ? : (reemplaza el if else)
           : this.url =
-              'https://futmxpr.000webhostapp.com/app/insertSolicitudJugador.php';
+              'https://futmxpr.000webhostapp.com/app/insertSolicitudJugador2.php';
     });
   }
 
@@ -154,13 +154,12 @@ class _interfazRegistroState extends State<interfazRegistro> {
     String body = response.body;
     print(statusCode);
     print(body);
-    if(body!=""){
+    if (body != "") {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text('Ya existe una solicitud de este usuario'),
         backgroundColor: Colors.red,
       ));
-    }
-    else{
+    } else {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text('Solicitud enviada'),
         backgroundColor: Colors.green,
@@ -182,13 +181,19 @@ class _interfazRegistroState extends State<interfazRegistro> {
     String body = response.body;
     print(statusCode);
     print(body);
-    if(body!=""){
+    if (body == "prepare() failed: Cannot add or update a child row: a foreign key constraint fails (`id12947947_futmx`.`solicitudesJugador`, CONSTRAINT `fk_equipoSolicitudJugador` FOREIGN KEY (`Id_Equipo`) REFERENCES `equipo` (`idEquipo`) ON DELETE CASCADE ON UPDATE CASCADE)") {
       Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('Ya existe una solicitud de este usuario'),
+        content: Text('No existe ningún equipo con el ID ingresado'),
+        backgroundColor: Colors.red,
+      ));
+    } 
+    else if(body == ("prepare() failed: Duplicate entry '"+controllerCedula.text+"' for key 'PRIMARY'")){
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('Ya existe una solicitud de este jugador'),
         backgroundColor: Colors.red,
       ));
     }
-    else{
+    else {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text('Solicitud enviada'),
         backgroundColor: Colors.green,
