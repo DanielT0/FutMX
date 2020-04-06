@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prueba_bd/Widgets/buttonSolicitud.dart';
-import './Widgets/Inputs.dart';
+import '../Widgets/Inputs.dart';
 
 class interfazInicioSesion extends StatefulWidget {
   @override

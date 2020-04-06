@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import './Widgets/Inputs.dart';
-import './Widgets/optionInterfazRegistro.dart';
-import './Widgets/buttonSolicitud.dart';
+import 'dart:convert' show jsonDecode;
+import '../Widgets/Inputs.dart';
+import '../Widgets/optionInterfazRegistro.dart';
+import '../Widgets/buttonSolicitud.dart';
 
 class interfazRegistro extends StatefulWidget {
   //StatefulWidget: Permite el cambio de elementos de los widgets
@@ -168,36 +169,53 @@ class _interfazRegistroState extends State<interfazRegistro> {
   }
 
   Future anadirJugador(BuildContext context) async {
-    // make POST request
     http.Response response = await http.post(this.url, body: {
       "Cedula": controllerCedula.text,
       "Nombre": controllerNombre.text,
       "Equipo": controllerIDEquipo.text,
       "Contraseña": controllerContrase.text
     });
-    // check the status code for the result
     int statusCode = response.statusCode;
-    // this API passes back the id of the new item added to the body
     String body = response.body;
     print(statusCode);
     print(body);
-    if (body == "prepare() failed: Cannot add or update a child row: a foreign key constraint fails (`id12947947_futmx`.`solicitudesJugador`, CONSTRAINT `fk_equipoSolicitudJugador` FOREIGN KEY (`Id_Equipo`) REFERENCES `equipo` (`idEquipo`) ON DELETE CASCADE ON UPDATE CASCADE)") {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('No existe ningún equipo con el ID ingresado'),
-        backgroundColor: Colors.red,
-      ));
-    } 
-    else if(body == ("prepare() failed: Duplicate entry '"+controllerCedula.text+"' for key 'PRIMARY'")){
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('Ya existe una solicitud de este jugador'),
-        backgroundColor: Colors.red,
-      ));
-    }
-    else {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('Solicitud enviada'),
-        backgroundColor: Colors.green,
-      ));
+
+    var urlGet = 'https://futmxpr.000webhostapp.com/app/getJugador.php';
+    http.Response responseUsuarioInscrito = await http.post(urlGet, body: {
+      "Cedula": controllerCedula.text,
+    });
+    int status = responseUsuarioInscrito.statusCode;
+    String bodyUsuarioInscrito = responseUsuarioInscrito.body;
+    var data = jsonDecode(responseUsuarioInscrito.body);
+    var respuestaUsuario = data.toString();
+    print(respuestaUsuario);
+    print(status);
+
+    if (body ==
+        "prepare() failed: Cannot add or update a child row: a foreign key constraint fails (`id12947947_futmx`.`solicitudesJugador`, CONSTRAINT `fk_equipoSolicitudJugador` FOREIGN KEY (`Id_Equipo`) REFERENCES `equipo` (`idEquipo`) ON DELETE CASCADE ON UPDATE CASCADE)") {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No existe ningún equipo con el ID ingresado'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else if (body ==
+        ("prepare() failed: Duplicate entry '" +
+            controllerCedula.text +
+            "' for key 'PRIMARY'")) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Ya existe una solicitud de este jugador'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Solicitud enviada'),
+          backgroundColor: Colors.green,
+        ),
+      );
     }
   }
 
