@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class snackBar extends StatelessWidget {
-  final String texto;
+  final String texto; //Texto que se mostrará
   final Color color;
 
   snackBar(this.texto, this.color);

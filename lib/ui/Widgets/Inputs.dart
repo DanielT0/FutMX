@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Inputs extends StatelessWidget {
-  final TextEditingController controller;
-  final String texto;
-  final bool obscureText;
-  final TextInputType keyboard;
+  final TextEditingController controller; //Controller del input (quien maneja lo que se ingresa en este)
+  final String texto; 
+  final bool obscureText; //Usado para contraseñas (true si se quiere que el texto no sea legible)
+  final TextInputType keyboard; //Tipo de entrada
 
   Inputs( this.texto, this.controller, this.keyboard, this.obscureText);
   @override
@@ -21,7 +21,7 @@ class Inputs extends StatelessWidget {
           ),
           child: Material(
             child: TextFormField(
-              validator: (value){
+              validator: (value){  //El validador por el que pusimos el From, este valida que no hayan espacios vacíos o números y letras en donde no deberían
                 if(value.isEmpty){
                   return 'Por favor ingresa este dato';
                 }

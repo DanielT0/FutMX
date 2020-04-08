@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prueba_bd/Widgets/buttonSolicitud.dart';
+import 'package:prueba_bd/ui/Widgets/buttonSolicitud.dart';
 import '../Widgets/Inputs.dart';
 
 class interfazInicioSesion extends StatefulWidget {
