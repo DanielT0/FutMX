@@ -2,17 +2,26 @@ import 'package:prueba_bd/models/liga.dart';
 import 'package:prueba_bd/resources/adminEquipo_red.dart';
 import 'package:prueba_bd/resources/ligas_red.dart';
 import 'package:prueba_bd/resources/solicitudAdminEquipo_red.dart';
-
+import 'package:prueba_bd/resources/equipo_red.dart';
 import './solicitudJugador_red.dart';
+import 'package:prueba_bd/resources/jugador_red.dart';
+import 'package:prueba_bd/resources/usuario_red.dart';
+
 import 'package:prueba_bd/models/solicitudJugador.dart';
 import 'package:prueba_bd/models/solicitudAdminEquipo.dart';
 import 'package:prueba_bd/models/adminEquipo.dart';
+import 'package:prueba_bd/models/equipo.dart';
+import 'package:prueba_bd/models/jugador.dart';
+import 'package:prueba_bd/models/usuario.dart';
 
 class RepositoryAll {
   final gestorSolicitudJugador = ProveedorSolicitudesJugador();
   final gestorAdminEquipo = ProveedorAdministradorEquipo();
   final gestorSolicitudAdminEquipo = ProveedorSolicitudAdminEquipo();
   final gestorLigas = ProveedorLigas();
+  final gestorEquipos = ProveedorEquipo();
+  final gestorJugadores = ProveedorJugador();
+  final gestorUsuarios = ProveedorUsuario();
 
   //Ligas
   Future<LigaModel> obtenerAllLigas() => gestorLigas.obtenerListaLigas();
@@ -25,6 +34,8 @@ class RepositoryAll {
     return resp; //De nuevo, se retorna la repuesta
   }
 
+  Future<SolicitudJugadorModel> obtenerSolicitudesJugadorEquipo(equipo) => gestorSolicitudJugador.obtenerSolicitudesJugadorEquipo(equipo);
+
   //Solicitud Admin
   Future insertSolicitudAdminEquipo(SolicitudAdministradorEquipo solicitud) {
     var resp = gestorSolicitudAdminEquipo
@@ -32,7 +43,25 @@ class RepositoryAll {
     return resp;
   }
 
-  //Admin
+  //Usuario
+  Future<Usuario> obtenerUsuarioCedula(String cedula) =>
+      gestorUsuarios.obtenerUsuarioCedula(cedula);
   
-  Future<AdministradorEquipo> obtenerAdminCedula(String cedula) => gestorAdminEquipo.obtenerAdminCedula(cedula);
+  Future<Usuario> obtenerUsuarioCorreo(String correo) =>
+      gestorUsuarios.obtenerUsuarioCorreo(correo);
+
+  //Admin
+  Future<AdministradorEquipo> obtenerAdminCedula(String cedula) =>
+      gestorAdminEquipo.obtenerAdminCedula(cedula);
+
+  Future<AdministradorEquipo> obtenerAdminCorreo(String correo) =>
+      gestorAdminEquipo.obtenerAdminCorreo(correo);
+
+  //Jugador
+  Future<Jugador> obtenerJugadorCedula(String cedula) =>
+      gestorJugadores.obtenerJugadorCedula(cedula);
+
+  //Equipo
+  Future<Equipo> obtenerEquipoNombre(String nombre) =>
+      gestorEquipos.obtenerEquipoNombre(nombre);
 }

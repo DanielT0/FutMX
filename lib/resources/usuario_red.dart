@@ -2,15 +2,15 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:prueba_bd/models/adminEquipo.dart';
+import 'package:prueba_bd/models/usuario.dart';
 
-class ProveedorAdministradorEquipo {
-  //Get All Todo items
-  //Searches if query string was passed
-  Future<AdministradorEquipo> obtenerAdminCedula(String cedula) async {
+// Clase para gestionar (hacer operaciones CRUD) de datos en la base de datos, comunicandose con el servidor
+
+class ProveedorUsuario {
+    Future<Usuario> obtenerUsuarioCedula(String cedula) async {
     var admin;
     http.Response response = await http.post(
-        'https://futmxpr.000webhostapp.com/app/getAdminEquipoCedula.php',
+        'https://futmxpr.000webhostapp.com/app/getUsuarioCedula.php',
         body: {"Cedula": cedula});
     print(response.body);
     if (response.statusCode == 200) {
@@ -19,7 +19,7 @@ class ProveedorAdministradorEquipo {
          admin=null;
       }
       else
-       admin = AdministradorEquipo.fromJson(json.decode(response.body));
+       admin = Usuario.fromJson(json.decode(response.body));
       return admin;
     } else {
       // If that call was not successful, throw an error.
@@ -27,10 +27,10 @@ class ProveedorAdministradorEquipo {
     }
   }
 
-  Future<AdministradorEquipo> obtenerAdminCorreo(String correo) async {
+  Future<Usuario> obtenerUsuarioCorreo(String correo) async {
     var admin;
     http.Response response = await http.post(
-        'https://futmxpr.000webhostapp.com/app/getAdminEquipoCorreo.php',
+        'https://futmxpr.000webhostapp.com/app/getUsuarioCorreo.php',
         body: {"Correo": correo});
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON
@@ -39,7 +39,7 @@ class ProveedorAdministradorEquipo {
          admin=null;
       }
       else
-       admin = AdministradorEquipo.fromJson(json.decode(response.body));
+       admin = Usuario.fromJson(json.decode(response.body));
       return admin;
     } else {
       // If that call was not successful, throw an error.

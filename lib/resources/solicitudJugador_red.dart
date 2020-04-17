@@ -41,4 +41,23 @@ class ProveedorSolicitudesJugador {
       throw Exception('Error al conectar con el servidor');
     }
   }
+
+  Future<SolicitudJugadorModel> obtenerSolicitudesJugadorEquipo(String equipo) async {
+    http.Response responseSolicitudesJugadorEquipo = await http
+        .post('https://futmxpr.000webhostapp.com/app/getSolicitudesJugadorEquipo.php', body: {
+      "Equipo": equipo,
+    });
+    int statusCode = responseSolicitudesJugadorEquipo.statusCode;
+    var data = jsonDecode(responseSolicitudesJugadorEquipo.body);
+    var respuestaUsuario = data.toString();
+    if (statusCode == 200) {
+      // If the call to the server was successful, parse the JSON
+      var solicitudes=SolicitudJugadorModel.fromJson(json.decode(responseSolicitudesJugadorEquipo.body));
+      
+      return solicitudes;
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load post');
+    }
+  }
 }

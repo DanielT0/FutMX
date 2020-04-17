@@ -218,59 +218,9 @@ class _interfazRegistroState extends State<interfazRegistro> {
         controllerIDEquipo.text,
         controllerNumeroJugador.text,
         controllerContrase.text);
-    this.bloc.addSolicitudJugador(solicitudJugador).then((resp) {
+    this.bloc.addSolicitudJugador(solicitudJugador, context).then((resp) {
       //Ahora llamamos a nuestro bloc (creado anteriormente), al método "addSolicitudJugador" (vamos para allá a ver que hace... carpeta blocs), usamos then (que devuelve el valor que retornam el método después de que se ejecuta)
       print(resp);
-      if (resp == // Validaciones... tomamos cada uno de los errores que nos puede retornar el servidor y asignamos una salida
-          "prepare() failed: Cannot add or update a child row: a foreign key constraint fails (`id12947947_futmx`.`solicitudesJugador`, CONSTRAINT `fk_equipoSolicitudJugador` FOREIGN KEY (`Id_Equipo`) REFERENCES `equipo` (`idEquipo`) ON DELETE CASCADE ON UPDATE CASCADE)") {
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text('No existe ningún equipo con el ID ingresado'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } else if (resp ==
-              ("prepare() failed: Duplicate entry '" +
-                  controllerCedula.text +
-                  "' for key 'PRIMARY'") ||
-          resp ==
-              ("prepare() failed: Duplicate entry '" +
-                  controllerNombre.text +
-                  "' for key 'Nombre_Jugador'")) {
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Ya existe una solicitud de este jugador'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } else if (resp ==
-          ("prepare() failed: Duplicate entry '" +
-              controllerNumeroJugador.text +
-              "' for key 'fk_unicoNumero'")) {
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Ya existe una solicitud con ese número de jugador'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } else if (resp ==
-          ("prepare() failed: Duplicate entry '" +
-              controllerCorreo.text +
-              "' for key 'Correo'")) {
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Ya existe una solicitud con ese correo'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } else {
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Solicitud enviada'),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
     });
   }
 
@@ -301,11 +251,11 @@ class _interfazRegistroState extends State<interfazRegistro> {
 
   @override
   Widget build(BuildContext context) {
-    bloc.allLigas.map((object) => object.ligas).listen((p) {
-      setState(() => ligas = p);
+    bloc.allLigas.map((object) => object.ligas).listen((p) {    // Escuchamos al stream (que no dará dato a dato el conjunto)
+      setState(() => ligas = p);                                //Le asignamos el conjunto a ligas          
       print(ligas);
       print(ligas[0].nombre);
-      this._dropDownMenuItems = buildDropdownMenuItems(this.ligas);
+      this._dropDownMenuItems = buildDropdownMenuItems(this.ligas);    // Le asignamos los items al dropdown
       _ligaseleccionada = _dropDownMenuItems[0].value;
     });
     bloc.allLigas.map((object) => object.ligas[0].nombre).listen(print);
