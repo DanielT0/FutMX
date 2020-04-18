@@ -28,65 +28,66 @@ class Bloc {
     var ejecutar1, ejecutar2;
     var mensaje;
     var color = Colors.red;
-    this.getUsuarioCedula(solicitud.cedula).then(
-      (resp) {
-        if (resp == null) {
-          ejecutar1 = true;
-        } else {
-          ejecutar1 = false;
-          mensaje = 'Ya existe un usuario con esa cédula';
-        }
-      },
-    ).then((resp) {
-      this.getUsuarioCorreo(solicitud.correo).then((resp) {
-        if (resp == null) {
-          ejecutar2 = true;
-        } else {
-          ejecutar2 = false;
-          mensaje = 'Ya existe un usuario con ese correo';
-        }
-      }).then(
-        (resp) {
-          if (ejecutar1 && ejecutar2) {
-            dato = _repository.insertSolicitudJugador(
-                solicitud); //El repositorio llamará a la clase que interactúa con el servidor.. vamos allá (carpeta resources, repositoryAll)
-            if (dato == // Validaciones... tomamos cada uno de los errores que nos puede retornar el servidor y asignamos una salida
-                "prepare() failed: Cannot add or update a child row: a foreign key constraint fails (`id12947947_futmx`.`solicitudesJugador`, CONSTRAINT `fk_equipoSolicitudJugador` FOREIGN KEY (`Id_Equipo`) REFERENCES `equipo` (`idEquipo`) ON DELETE CASCADE ON UPDATE CASCADE)") {
-              mensaje = 'No existe ningún equipo con el ID ingresado';
-            } else if (resp ==
-                    ("prepare() failed: Duplicate entry '" +
-                        solicitud.cedula +
-                        "' for key 'PRIMARY'") ||
-                dato ==
-                    ("prepare() failed: Duplicate entry '" +
-                        solicitud.nombre +
-                        "' for key 'Nombre_Jugador'")) {
-              mensaje = 'Ya existe una solicitud de este jugador';
-            } else if (dato ==
-                ("prepare() failed: Duplicate entry '" +
-                    solicitud.numero +
-                    "' for key 'fk_unicoNumero'")) {
-              mensaje = 'Ya existe una solicitud con ese número de jugador';
-            } else if (dato ==
-                ("prepare() failed: Duplicate entry '" +
-                    solicitud.correo +
-                    "' for key 'Correo'")) {
-              mensaje = 'Ya existe una solicitud con ese correo';
-            } else {
-              mensaje = 'Solicitud enviada';
-              color = Colors.green;
-            }
-          }
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text(mensaje),
-              backgroundColor: color,
-            ),
-          );
-        },
-      );
-      return resp; //Dato toma el valor de la respuesta dada por el servidor (lo usamos para manejar errores con snackbars en la interfaz)
-    });
+    var resp = await getUsuarioCedula(solicitud.cedula);
+    if (resp == null) {
+      ejecutar1 = true;
+    } else {
+      ejecutar1 = false;
+      mensaje = 'Ya existe un usuario con esa cédula';
+    }
+
+    var respuesta = await getUsuarioCorreo(solicitud.correo);
+    if (respuesta == null) {
+      ejecutar2 = true;
+    } else {
+      ejecutar2 = false;
+      mensaje = 'Ya existe un usuario con ese correo';
+    }
+    if (ejecutar1 && ejecutar2) {
+      dato = await _repository.insertSolicitudJugador(
+          solicitud); //El repositorio llamará a la clase que interactúa con el servidor.. vamos allá (carpeta resources, repositoryAll)
+      if (dato == // Validaciones... tomamos cada uno de los errores que nos puede retornar el servidor y asignamos una salida
+          "prepare() failed: Cannot add or update a child row: a foreign key constraint fails (`id12947947_futmx`.`solicitudesJugador`, CONSTRAINT `fk_equipoSolicitudJugador` FOREIGN KEY (`Id_Equipo`) REFERENCES `equipos` (`idEquipo`) ON DELETE CASCADE ON UPDATE CASCADE)") {
+        mensaje = 'No existe ningún equipo con el ID ingresado';
+      } else if (dato ==
+              ("prepare() failed: Duplicate entry '" +
+                  solicitud.cedula +
+                  "' for key 'PRIMARY'") ||
+          dato ==
+              ("prepare() failed: Duplicate entry '" +
+                  solicitud.nombre +
+                  "' for key 'Nombre_Jugador'")) {
+        mensaje = 'Ya existe una solicitud de este jugador';
+      } else if (dato ==
+          ("prepare() failed: Duplicate entry '" +
+              solicitud.numero +
+              "' for key 'fk_unicoNumero'")) {
+        mensaje = 'Ya existe una solicitud con ese número de jugador';
+      } else if (dato ==
+          ("prepare() failed: Duplicate entry '" +
+              solicitud.correo +
+              "' for key 'Correo'")) {
+        mensaje = 'Ya existe una solicitud con ese correo';
+      } else {
+        mensaje = 'Solicitud enviada';
+        color = Colors.green;
+      }
+      print(dato);
+      print(ejecutar2);
+      print("janjanjanjansanjasas");
+    }
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Text(mensaje),
+        backgroundColor: color,
+      ),
+    );
+    return resp; //Dato toma el valor de la respuesta dada por el servidor (lo usamos para manejar errores con snackbars en la interfaz)
+  }
+
+  Future deleteSolicitudJugador(String cedula) async {
+    var resp = await this._repository.deleteSolicitudJugador(cedula);
+    return resp;
   }
 
   Stream<SolicitudJugadorModel> get solicitudesJugadorEquipo =>
@@ -112,80 +113,64 @@ class Bloc {
     var mensaje;
     var color = Colors.red;
     var dato;
-    this.getUsuarioCedula(solicitud.cedula).then(
-      (resp) {
-        if (resp == null) {
-          ejecutar1 = true;
-        } else {
-          ejecutar1 = false;
-          mensaje = 'Ya existe un usuario con esa cédula';
-        }
-      },
-    ).then(
-      (resp) {
-        this.getUsuarioCorreo(solicitud.correo).then(
-          (resp) {
-            if (resp == null) {
-              ejecutar = true;
-            } else {
-              ejecutar = false;
-              mensaje = 'Ya existe un usuario con ese correo';
-            }
-          },
-        ).then(
-          (resp) {
-            this.getEquipoNombre(solicitud.equipo).then((resp) {
-              if (resp == null) {
-                ejecutar2 = true;
-              } else {
-                ejecutar2 = false;
-                mensaje = 'Ya existe un equipo con ese nombre';
-              }
-            }).then(
-              (resp) {
-                if (ejecutar && ejecutar1 && ejecutar2) {
-                  dato = _repository.insertSolicitudAdminEquipo(
-                      solicitud); // El código es muy parecido, sólo cambian las entidades
-                  if (dato ==
-                      ("prepare() failed: Duplicate entry '" +
-                          solicitud.cedula +
-                          "' for key 'PRIMARY'")) {
-                    mensaje = 'Ya existe una solicitud de este usuario';
-                  } else if (dato ==
-                      ("prepare() failed: Duplicate entry '" +
-                          solicitud.nombre +
-                          "' for key 'Nombre_Usuario'")) {
-                    mensaje =
-                        'Ya existe una solicitud con ese nombre de usuario';
-                  } else if (dato ==
-                      ("prepare() failed: Duplicate entry '" +
-                          solicitud.equipo +
-                          "' for key 'Nombre_Equipo'")) {
-                    mensaje = 'Ya existe una solicitud de ese equipo';
-                  } else if (dato ==
-                      ("prepare() failed: Duplicate entry '" +
-                          solicitud.correo +
-                          "' for key 'Correo'")) {
-                    mensaje = 'Ya existe una solicitud con ese correo';
-                  } else {
-                    mensaje = 'Solicitud enviada';
-                    color = Colors.green;
-                  }
-                } else
-                  dato = 'No se ejecutó';
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(mensaje),
-                    backgroundColor: color,
-                  ),
-                );
-                return dato;
-              },
-            );
-          },
-        );
-      },
+    var resp = await getUsuarioCedula(solicitud.cedula);
+    if (resp == null) {
+      ejecutar1 = true;
+    } else {
+      ejecutar1 = false;
+      mensaje = 'Ya existe un usuario con esa cédula';
+    }
+    var respuesta = await getUsuarioCorreo(solicitud.correo);
+    if (respuesta == null) {
+      ejecutar = true;
+    } else {
+      ejecutar = false;
+      mensaje = 'Ya existe un usuario con ese correo';
+    }
+    var respuesta2 =  await getEquipoNombre(solicitud.equipo);
+    if (respuesta2 == null) {
+      ejecutar2 = true;
+    } else {
+      ejecutar2 = false;
+      mensaje = 'Ya existe un equipo con ese nombre';
+    }
+
+    if (ejecutar && ejecutar1 && ejecutar2) {
+      dato = await _repository.insertSolicitudAdminEquipo(
+          solicitud); // El código es muy parecido, sólo cambian las entidades
+      if (dato ==
+          ("prepare() failed: Duplicate entry '" +
+              solicitud.cedula +
+              "' for key 'PRIMARY'")) {
+        mensaje = 'Ya existe una solicitud de este usuario';
+      } else if (dato ==
+          ("prepare() failed: Duplicate entry '" +
+              solicitud.nombre +
+              "' for key 'Nombre_Usuario'")) {
+        mensaje = 'Ya existe una solicitud con ese nombre de usuario';
+      } else if (dato ==
+          ("prepare() failed: Duplicate entry '" +
+              solicitud.equipo +
+              "' for key 'Nombre_Equipo'")) {
+        mensaje = 'Ya existe una solicitud de ese equipo';
+      } else if (dato ==
+          ("prepare() failed: Duplicate entry '" +
+              solicitud.correo +
+              "' for key 'Correo'")) {
+        mensaje = 'Ya existe una solicitud con ese correo';
+      } else {
+        mensaje = 'Solicitud enviada';
+        color = Colors.green;
+      }
+    } else
+      dato = 'No se ejecutó';
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Text(mensaje),
+        backgroundColor: color,
+      ),
     );
+    return dato;
   }
 
   Future iniciarSesion(
@@ -194,42 +179,29 @@ class Bloc {
     var respuesta = false;
     var resp = await this._repository.obtenerUsuarioCorreo(correo);
     if (resp != null) {
-          if (contrasena == resp.contrasena) {
-            respuesta = true;
-          } else {
-            respuesta = false;
-          }
-          this._repository.obtenerJugadorCedula(resp.cedula).then(
-            (respJugador) {
-              if (respJugador != null) {
-                Jugador jugador = new Jugador(
-                    resp.cedula,
-                    resp.nombre,
-                    resp.correo,
-                    respJugador.equipo,
-                    respJugador.numero,
-                    resp.contrasena);
-                myProvider.jugadorUser = jugador;
-                myProvider.tipo = "Jugador";
-              } else {
-                this._repository.obtenerAdminCedula(resp.cedula).then(
-                  (respAdmin) {
-                    AdministradorEquipo admin = new AdministradorEquipo(
-                        resp.cedula,
-                        resp.nombre,
-                        resp.correo,
-                        respAdmin.equipo,
-                        resp.contrasena);
-                    myProvider.administradorUser = admin;
-                    myProvider.tipo = "Administrador Equipo";
-                  },
-                );
-              }
-            },
-          );
-        } else {
-          respuesta = false;
-        }
+      if (contrasena == resp.contrasena) {
+        respuesta = true;
+      } else {
+        respuesta = false;
+      }
+      var respJugador =
+          await this._repository.obtenerJugadorCedula(resp.cedula);
+      if (respJugador != null) {
+        Jugador jugador = new Jugador(resp.cedula, resp.nombre, resp.correo,
+            respJugador.equipo, respJugador.numero, resp.contrasena);
+        myProvider.jugadorUser = jugador;
+        myProvider.tipo = "Jugador";
+      } else {
+        var respAdmin = await this._repository.obtenerAdminCedula(resp.cedula);
+        AdministradorEquipo admin = new AdministradorEquipo(resp.cedula,
+            resp.nombre, resp.correo, respAdmin.equipo, resp.contrasena);
+        myProvider.administradorUser = admin;
+        print(respAdmin.equipo);
+        myProvider.tipo = "Administrador Equipo";
+      }
+    } else {
+      respuesta = false;
+    }
     print(respuesta);
     return respuesta;
   }
@@ -261,6 +233,12 @@ class Bloc {
   //Jugador
   Future getJugadorCedula(String cedula) async {
     var jugador = await _repository.obtenerJugadorCedula(
+        cedula); // El código es muy parecido, sólo cambian las entidades
+    return jugador;
+  }
+
+  Future addJugador(String cedula) async {
+    var jugador = await _repository.insertJugador(
         cedula); // El código es muy parecido, sólo cambian las entidades
     return jugador;
   }

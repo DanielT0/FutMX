@@ -8,6 +8,7 @@ import 'package:prueba_bd/models/usuario.dart';
 
 class ProveedorUsuario {
     Future<Usuario> obtenerUsuarioCedula(String cedula) async {
+      print(cedula);
     var admin;
     http.Response response = await http.post(
         'https://futmxpr.000webhostapp.com/app/getUsuarioCedula.php',
@@ -28,6 +29,7 @@ class ProveedorUsuario {
   }
 
   Future<Usuario> obtenerUsuarioCorreo(String correo) async {
+    
     var admin;
     http.Response response = await http.post(
         'https://futmxpr.000webhostapp.com/app/getUsuarioCorreo.php',

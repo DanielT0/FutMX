@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class buttonSolicitud extends StatelessWidget {
   final Function enviarSolicitud;
+  final String texto;
 
-  buttonSolicitud(this.enviarSolicitud);
+  buttonSolicitud(this.enviarSolicitud, this.texto);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class buttonSolicitud extends StatelessWidget {
             borderRadius: BorderRadius.circular(30),
           ),
           child: Text(
-            'Enviar solicitud',
+            this.texto,
           ),
           textColor: Colors.white,
           color: Colors.green,

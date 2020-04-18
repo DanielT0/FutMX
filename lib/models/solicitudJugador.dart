@@ -2,6 +2,8 @@
 class SolicitudJugadorModel {
   List<SolicitudJugador> _solicitudesJugador = [];
 
+  SolicitudJugadorModel(this._solicitudesJugador);
+
   SolicitudJugadorModel.fromJson(Map<String, dynamic> parsedJson) {
     print(parsedJson['solicitudes'].length);
     List<SolicitudJugador> temp = [];

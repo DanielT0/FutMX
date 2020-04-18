@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prueba_bd/ui/Widgets/buttonSolicitud.dart';
 import 'package:prueba_bd/ui/screens/principalAdmin.dart';
-import 'package:prueba_bd/ui/screens/principalAdminn.dart';
 import '../Widgets/Inputs.dart';
 import 'package:prueba_bd/providers/estadoGlobal.dart';
 
@@ -43,30 +42,35 @@ class _interfazInicioSesionState extends State<interfazInicioSesion> {
   ];
 
   void iniciarSesion(BuildContext context) async {
-    bloc
-        .iniciarSesion(
-            // En bloc pusimos que si el usuario y contraseña estaban bien se devolvía true, de lo contrario, false
-            controllerCorreo.text,
-            controllerContrase.text,
-            context)
-        .then(
-      (resp) {
-        if (!resp) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Usuario o contraseña incorrectos'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        } else {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (BuildContext context) => new principalAdmin(),
-            ),
-          );
-        }
-      },
-    );
+    var resp = await bloc.iniciarSesion(
+        // En bloc pusimos que si el usuario y contraseña estaban bien se devolvía true, de lo contrario, false
+        controllerCorreo.text,
+        controllerContrase.text,
+        context);
+    if (!resp) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Usuario o contraseña incorrectos'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {
+      var myProvider = Provider.of<EstadoGlobal>(context, listen: false);
+      if (myProvider.tipo == "Administrador Equipo") {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => new principalAdmin(),
+          ),
+        );
+      } else {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Trabajando en interfaz de jugador'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -80,7 +84,9 @@ class _interfazInicioSesionState extends State<interfazInicioSesion> {
             padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: ListView(
               children: <Widget>[
-                SizedBox(height: 120,),
+                SizedBox(
+                  height: 120,
+                ),
                 Align(
                   alignment: Alignment.center,
                   child: Text(
@@ -104,7 +110,7 @@ class _interfazInicioSesionState extends State<interfazInicioSesion> {
                       input['obscureText']); //Inputs con parámetros
                 }).toList(),
                 buttonSolicitud(
-                  () => this.iniciarSesion(context),
+                  () => this.iniciarSesion(context), "Iniciar sesión"
                 ),
               ],
             ),

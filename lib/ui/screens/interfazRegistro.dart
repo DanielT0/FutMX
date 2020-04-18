@@ -334,7 +334,7 @@ class _interfazRegistroState extends State<interfazRegistro> {
                   ],
                 ),
                 buttonSolicitud(() => enviarSolicitud(
-                    context)), //Llama al botón asignandole un método (función)
+                    context), "Enviar solicitud"), //Llama al botón asignandole un método (función)
                 SizedBox(
                   height: 40,
                 ),

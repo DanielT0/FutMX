@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 import 'package:prueba_bd/blocs/bloc.dart';
 import 'package:prueba_bd/ui/Widgets/solicitudesJugadorList.dart';
 import 'package:prueba_bd/models/solicitudJugador.dart';
+import 'package:prueba_bd/providers/estadoGlobal.dart';
 
 import 'dart:async';
 
@@ -16,23 +18,26 @@ class principalAdmin extends StatefulWidget {
 
 class _principalAdminState extends State<principalAdmin> {
   int _page;
+  String _equipo = "";
   String _textHead = "";
   GlobalKey _bottomNavigationKey = GlobalKey();
   Bloc bloc = new Bloc();
-  SolicitudesJugadorList jugadores = new SolicitudesJugadorList();
-  Timer _temporizador;     // Temporizador usado para reconstruir la interfaz cada cierto tiempo
+  Timer
+      _temporizador; // Temporizador usado para reconstruir la interfaz cada cierto tiempo
   @override
   void initState() {
     super.initState();
     _temporizador = Timer.periodic(
-      Duration(seconds: 5),
+      Duration(seconds: 2),
       (Timer t) {
         if (this.mounted) {
-          setState(
-            () {
-              bloc.obtenerSolicitudesJugadorEquipo('1');
-            },
-          );
+          if (_equipo.isNotEmpty) {
+            setState(
+              () {
+                bloc.obtenerSolicitudesJugadorEquipo(_equipo);
+              },
+            );
+          }
         }
       },
     );
@@ -62,9 +67,21 @@ class _principalAdminState extends State<principalAdmin> {
     });
   }
 
+  Future eliminarSolicitud(String cedula) async {
+    var resp = await this.bloc.deleteSolicitudJugador(cedula);
+    print(resp);
+  }
+
+  Future aceptarSolicitud(String cedula) async {
+    var resp = await this.bloc.addJugador(cedula);
+    print(resp);
+  }
+
   @override
   Widget build(BuildContext context) {
-    bloc.obtenerSolicitudesJugadorEquipo('1');
+    var myProvider = Provider.of<EstadoGlobal>(context, listen: false);
+    _equipo = myProvider.administradorUser.equipo;
+    bloc.obtenerSolicitudesJugadorEquipo(myProvider.administradorUser.equipo);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -125,7 +142,7 @@ class _principalAdminState extends State<principalAdmin> {
         },
       ),
       body: Padding(
-        padding: EdgeInsets.only(left: 30, right: 0),
+        padding: EdgeInsets.only(left: 30, right: 5),
         child: Container(
           child: Padding(
             padding: EdgeInsets.only(left: 10, right: 10, bottom: 0),
@@ -152,7 +169,9 @@ class _principalAdminState extends State<principalAdmin> {
           stream: bloc.solicitudesJugadorEquipo,
           builder: (context, AsyncSnapshot<SolicitudJugadorModel> snapshot) {
             if (snapshot.hasData) {
-              return jugadores.buildList(snapshot);
+              SolicitudesJugadorList jugadores = new SolicitudesJugadorList(
+                  this.eliminarSolicitud, this.aceptarSolicitud);
+              return jugadores.buildList(snapshot, context);
             } else if (snapshot.hasError) {
               return Text(snapshot.error.toString());
             }

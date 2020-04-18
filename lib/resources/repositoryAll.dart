@@ -34,7 +34,13 @@ class RepositoryAll {
     return resp; //De nuevo, se retorna la repuesta
   }
 
-  Future<SolicitudJugadorModel> obtenerSolicitudesJugadorEquipo(equipo) => gestorSolicitudJugador.obtenerSolicitudesJugadorEquipo(equipo);
+  Future deleteSolicitudJugador(String cedula) {
+    var resp = gestorSolicitudJugador.eliminarSolicitudJugador(cedula);
+    return resp;
+  }
+
+  Future<SolicitudJugadorModel> obtenerSolicitudesJugadorEquipo(equipo) =>
+      gestorSolicitudJugador.obtenerSolicitudesJugadorEquipo(equipo);
 
   //Solicitud Admin
   Future insertSolicitudAdminEquipo(SolicitudAdministradorEquipo solicitud) {
@@ -46,7 +52,7 @@ class RepositoryAll {
   //Usuario
   Future<Usuario> obtenerUsuarioCedula(String cedula) =>
       gestorUsuarios.obtenerUsuarioCedula(cedula);
-  
+
   Future<Usuario> obtenerUsuarioCorreo(String correo) =>
       gestorUsuarios.obtenerUsuarioCorreo(correo);
 
@@ -60,6 +66,9 @@ class RepositoryAll {
   //Jugador
   Future<Jugador> obtenerJugadorCedula(String cedula) =>
       gestorJugadores.obtenerJugadorCedula(cedula);
+
+  Future insertJugador(String cedula) =>
+      gestorJugadores.anadirJugador(cedula);
 
   //Equipo
   Future<Equipo> obtenerEquipoNombre(String nombre) =>
