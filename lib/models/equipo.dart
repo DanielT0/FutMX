@@ -12,7 +12,7 @@ class Equipo {
     this._idEquipo = parsedJson['idEquipo'];
     this._nombre = parsedJson['Nombre'];
     this._idLiga = parsedJson['idLiga'];
-    this._foto = "parsedJson['Id_Equipo']";
+    this._foto = parsedJson["dirFoto"];
   }
 
  //Getters

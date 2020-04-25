@@ -24,4 +24,22 @@ class ProveedorEquipo {
       throw Exception('Failed to load post');
     }
   }
+
+  Future<Equipo> obtenerEquipoId(String id) async {
+    var admin;
+    http.Response response = await http.post(
+        'https://futmxpr.000webhostapp.com/app/getEquipoId.php',
+        body: {"idEquipo": id});
+    if (response.statusCode == 200) {
+      // If the call to the server was successful, parse the JSON
+      if (json.decode(response.body) == false) {
+        admin = null;
+      } else
+        admin = Equipo.fromJson(json.decode(response.body));
+      return admin;
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load post');
+    }
+  }
 }

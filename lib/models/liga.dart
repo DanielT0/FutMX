@@ -22,7 +22,7 @@ class Liga {
 
   Liga(resultado){
     this._idLiga=resultado['idLiga'];
-    this._nombre= resultado['Nombre'];
+    this._nombre= resultado['NombreLiga'];
     this._precio=resultado['PrecioArbitraje'];
   } //Constructor
 

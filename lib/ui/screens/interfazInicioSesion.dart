@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prueba_bd/ui/Widgets/buttonSolicitud.dart';
 import 'package:prueba_bd/ui/screens/principalAdmin.dart';
+import 'package:prueba_bd/ui/screens/principalJugador.dart';
 import '../Widgets/Inputs.dart';
 import 'package:prueba_bd/providers/estadoGlobal.dart';
 
@@ -56,17 +57,16 @@ class _interfazInicioSesionState extends State<interfazInicioSesion> {
       );
     } else {
       var myProvider = Provider.of<EstadoGlobal>(context, listen: false);
-      if (myProvider.tipo == "Administrador Equipo") {
+      if (myProvider.tipo == "Jugador") {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (BuildContext context) => new principalAdmin(),
+            builder: (BuildContext context) => new PrincipalJugador(),
           ),
         );
       } else {
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Trabajando en interfaz de jugador'),
-            backgroundColor: Colors.green,
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => new PrincipalAdmin(),
           ),
         );
       }
@@ -110,8 +110,7 @@ class _interfazInicioSesionState extends State<interfazInicioSesion> {
                       input['obscureText']); //Inputs con parámetros
                 }).toList(),
                 buttonSolicitud(
-                  () => this.iniciarSesion(context), "Iniciar sesión"
-                ),
+                    () => this.iniciarSesion(context), "Iniciar sesión"),
               ],
             ),
           );

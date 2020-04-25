@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:prueba_bd/models/equipo.dart';
 
 import 'package:prueba_bd/models/jugador.dart';
 import 'package:prueba_bd/models/adminEquipo.dart';
@@ -15,6 +16,7 @@ class EstadoGlobal with ChangeNotifier {
 Jugador _userJugador;      //Objeto que representa al jugador que ha iniciado sesión
 AdministradorEquipo _userAdmin;     //Objeto que representa al admin que ha iniciado sesión
 String _tipo;
+Equipo _equipo;
 
 String get tipo => _tipo;              //Con él sabremos qué tipo de usuario está navegando
 
@@ -35,6 +37,13 @@ AdministradorEquipo get administradorUser => _userAdmin;
 set administradorUser(AdministradorEquipo newAdmin){
 _userAdmin= newAdmin;
 notifyListeners();
+}
+
+Equipo get equipo => _equipo;
+
+set equipo(Equipo equipo){
+  _equipo = equipo;
+  notifyListeners();
 }
 
 int _usuario = null; //Dentro de nuestro provider, creamos e inicializamos nuestra variable. En este caso un int correspondiente a la cédula del usuario que está activo

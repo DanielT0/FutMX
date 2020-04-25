@@ -70,9 +70,12 @@ class _HomeState extends State<Home> {
                           return (Container(
                             width: MediaQuery.of(context).size.width,
                             margin: EdgeInsets.symmetric(horizontal: 10),
-                            child: Image.asset(
-                              img,
-                              fit: BoxFit.cover,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                            child: Container(
+                              child: Image.asset(
+                                img,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ));
                         },

@@ -1,3 +1,4 @@
+import 'package:prueba_bd/models/partido.dart';
 import 'package:prueba_bd/models/solicitudAdminEquipo.dart';
 import 'package:prueba_bd/models/liga.dart';
 import 'package:prueba_bd/models/solicitudJugador.dart';
@@ -5,6 +6,7 @@ import 'package:prueba_bd/resources/repositoryAll.dart';
 import 'package:prueba_bd/providers/estadoGlobal.dart';
 import 'package:prueba_bd/models/jugador.dart';
 import 'package:prueba_bd/models/adminEquipo.dart';
+import 'package:prueba_bd/models/equipo.dart';
 
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -19,6 +21,9 @@ class Bloc {
   final _ligasFetcher = PublishSubject<
       LigaModel>(); // Usados para streams, devuelven el valor más reciente del objeto encontrado en la base de datos
   final _solicitudJugadorFetcher = PublishSubject<SolicitudJugadorModel>();
+
+  final _partidosFetcher = PublishSubject<PartidoModel>();
+  final _anterioresPartidosFetcher = PublishSubject<PartidoModel>();
 
   //Solicitudes Jugador
   Future addSolicitudJugador(
@@ -72,9 +77,6 @@ class Bloc {
         mensaje = 'Solicitud enviada';
         color = Colors.green;
       }
-      print(dato);
-      print(ejecutar2);
-      print("janjanjanjansanjasas");
     }
     Scaffold.of(context).showSnackBar(
       SnackBar(
@@ -127,7 +129,7 @@ class Bloc {
       ejecutar = false;
       mensaje = 'Ya existe un usuario con ese correo';
     }
-    var respuesta2 =  await getEquipoNombre(solicitud.equipo);
+    var respuesta2 = await getEquipoNombre(solicitud.equipo);
     if (respuesta2 == null) {
       ejecutar2 = true;
     } else {
@@ -191,13 +193,17 @@ class Bloc {
             respJugador.equipo, respJugador.numero, resp.contrasena);
         myProvider.jugadorUser = jugador;
         myProvider.tipo = "Jugador";
+        var equipo = await this._repository.obtenerEquipoId(respJugador.equipo);
+        myProvider.equipo = equipo;
       } else {
         var respAdmin = await this._repository.obtenerAdminCedula(resp.cedula);
         AdministradorEquipo admin = new AdministradorEquipo(resp.cedula,
             resp.nombre, resp.correo, respAdmin.equipo, resp.contrasena);
         myProvider.administradorUser = admin;
-        print(respAdmin.equipo);
         myProvider.tipo = "Administrador Equipo";
+        print("huiaiuashuiyutvrcec5rvtbyycxcdtfvgyuh");
+        var equipo = await this._repository.obtenerEquipoId(respAdmin.equipo);
+        myProvider.equipo = equipo;
       }
     } else {
       respuesta = false;
@@ -249,6 +255,7 @@ class Bloc {
   obtenerTodasLigas() async {
     LigaModel liga = await _repository.obtenerAllLigas();
     _ligasFetcher.sink.add(liga);
+    print("jnnijniunuiuaniuaniuanauininaa");
   }
 
   disposeLigas() {
@@ -259,6 +266,35 @@ class Bloc {
   Future getEquipoNombre(String nombre) async {
     var admin = await _repository.obtenerEquipoNombre(nombre);
     return admin;
+  }
+
+  Future<Equipo> getEquipoId(String id) async {
+    var admin = await _repository.obtenerEquipoId(id);
+    return admin;
+  }
+
+  //Partidos
+  Stream<PartidoModel> get proximosPartidos => _partidosFetcher.stream;
+
+  Stream<PartidoModel> get anterioresPartidos =>
+      _anterioresPartidosFetcher.stream;
+
+  obtenerProximosPartidos(String cedula) async {
+    PartidoModel partido = await _repository.obtenerProximosPartidos(cedula);
+    _partidosFetcher.sink.add(partido);
+  }
+
+  obtenerAnterioresPartidos(String cedula) async {
+    PartidoModel partido = await _repository.obtenerAnterioresPartidos(cedula);
+    _anterioresPartidosFetcher.sink.add(partido);
+  }
+
+  disposeAnterioresPartidos() {
+    _anterioresPartidosFetcher.close();
+  }
+
+  disposePartidos() {
+    _partidosFetcher.close();
   }
 }
 
