@@ -7,6 +7,7 @@ import './solicitudJugador_red.dart';
 import 'package:prueba_bd/resources/jugador_red.dart';
 import 'package:prueba_bd/resources/usuario_red.dart';
 import 'package:prueba_bd/resources/partidos_red.dart';
+import 'package:prueba_bd/resources/posiciones_red.dart';
 
 import 'package:prueba_bd/models/solicitudJugador.dart';
 import 'package:prueba_bd/models/solicitudAdminEquipo.dart';
@@ -15,6 +16,7 @@ import 'package:prueba_bd/models/equipo.dart';
 import 'package:prueba_bd/models/jugador.dart';
 import 'package:prueba_bd/models/usuario.dart';
 import 'package:prueba_bd/models/partido.dart';
+import 'package:prueba_bd/models/posicion.dart';
 
 class RepositoryAll {
   final gestorSolicitudJugador = ProveedorSolicitudesJugador();
@@ -25,6 +27,7 @@ class RepositoryAll {
   final gestorJugadores = ProveedorJugador();
   final gestorUsuarios = ProveedorUsuario();
   final gestorPartidos = ProveedorPartidos();
+  final gestorPosiciones = ProveedorPosiciones();
 
   //Ligas
   Future<LigaModel> obtenerAllLigas() => gestorLigas.obtenerListaLigas();
@@ -70,6 +73,9 @@ class RepositoryAll {
   Future<Jugador> obtenerJugadorCedula(String cedula) =>
       gestorJugadores.obtenerJugadorCedula(cedula);
 
+  Future<JugadorModel> obtenerJugadoresEquipo(String idEquipo) =>
+      gestorJugadores.obtenerJugadoresEquipo(idEquipo);
+
   Future insertJugador(String cedula) => gestorJugadores.anadirJugador(cedula);
 
   //Equipo
@@ -84,4 +90,8 @@ class RepositoryAll {
 
   Future<PartidoModel> obtenerAnterioresPartidos(String idEquipo) =>
       gestorPartidos.obtenerAnterioresPartidos(idEquipo);
+
+  //Posiciones
+  Future<PosicionModel> obtenerPosiciones(String idLiga) =>
+      gestorPosiciones.obtenerPosiciones(idLiga);
 }

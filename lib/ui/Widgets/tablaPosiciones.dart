@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:prueba_bd/models/posicion.dart';
 
-class TablaPosiciones extends StatefulWidget {
-  @override
-  _TablaPosicionesState createState() => _TablaPosicionesState();
-}
-
-class _TablaPosicionesState extends State<TablaPosiciones> {
-  @override
-  Widget build(BuildContext context) {
+class TablaPosiciones {
+  Widget buildList(
+      AsyncSnapshot<PosicionModel> snapshot, BuildContext context) {
     return DataTable(
+      columnSpacing: 10,
       columns: [
         DataColumn(
-          label: Text("Posición"),
+          label: Text(
+            "Posición",
+            textAlign: TextAlign.center,
+          ),
         ),
         DataColumn(
-          label: Text("Equipo"),
+          label: Text("Equipo", textAlign: TextAlign.center,),
         ),
         DataColumn(
-          label: Text("Jugados"),
+          label: Text("Partidos Jugados"),
         ),
         DataColumn(
           label: Text("Ganados"),
@@ -41,7 +41,92 @@ class _TablaPosicionesState extends State<TablaPosiciones> {
           label: Text("PTS"),
         ),
       ],
-      rows: [],
+      rows: snapshot.data.posiciones
+          .map(
+            (posicion) => DataRow(
+              cells: [
+                DataCell(
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      (snapshot.data.posiciones.indexOf(posicion) + 1)
+                          .toString(),
+                    ),
+                  ),
+                ),
+                DataCell(
+                  Container(
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 10.0,
+                          backgroundImage: NetworkImage(
+                              'https://futmxpr.000webhostapp.com/imagenes/' +
+                                  posicion.foto),
+                        ),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        Text(posicion.equipo),
+                      ],
+                    ),
+                  ),
+                ),
+                DataCell(
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(posicion.jugados),
+                  ),
+                ),
+                DataCell(
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(posicion.ganados),
+                  ),
+                ),
+                DataCell(
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(posicion.empatados),
+                  ),
+                ),
+                DataCell(
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(posicion.perdidos),
+                  ),
+                ),
+                DataCell(
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(posicion.golesFavor),
+                  ),
+                ),
+                DataCell(
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(posicion.golesContra),
+                  ),
+                ),
+                DataCell(
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text((int.parse(posicion.golesFavor) -
+                            int.parse(posicion.golesContra))
+                        .toString()),
+                  ),
+                ),
+                DataCell(
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(posicion.puntos),
+                  ),
+                ),
+              ],
+            ),
+          )
+          .toList(),
     );
   }
 }

@@ -1,5 +1,24 @@
 // Player class model
 
+class JugadorModel {
+  List<Jugador> _jugadores = [];
+
+  JugadorModel(this._jugadores);
+
+  JugadorModel.fromJson(Map<String, dynamic> parsedJson) {
+    print(parsedJson['jugadores'].length);
+    List<Jugador> temp = [];
+    for (int i = 0; i < parsedJson['jugadores'].length; i++) {
+      Jugador jugador =
+          Jugador.fromJson(parsedJson['jugadores'][i]);
+      temp.add(jugador);
+    }
+    _jugadores = temp;
+  }
+
+  List<Jugador> get jugadores => _jugadores;
+}
+
 class Jugador {
   String _cedula;
   String _nombre;

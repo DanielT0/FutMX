@@ -43,6 +43,12 @@ class _interfazInicioSesionState extends State<interfazInicioSesion> {
   ];
 
   void iniciarSesion(BuildContext context) async {
+    Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Estableciendo conexión...'),
+          backgroundColor: Colors.green,
+        ),
+      );
     var resp = await bloc.iniciarSesion(
         // En bloc pusimos que si el usuario y contraseña estaban bien se devolvía true, de lo contrario, false
         controllerCorreo.text,
@@ -102,13 +108,16 @@ class _interfazInicioSesionState extends State<interfazInicioSesion> {
                   height: 45,
                 ),
                 ...(_inputsText[0]['inputsText'] as List<Map<String, Object>>)
-                    .map((input) {
-                  return Inputs(
+                    .map(
+                  (input) {
+                    return Inputs(
                       input['text'],
                       input['controller'],
                       input['keyBoardType'],
-                      input['obscureText']); //Inputs con parámetros
-                }).toList(),
+                      input['obscureText'],
+                    ); //Inputs con parámetros
+                  },
+                ).toList(),
                 buttonSolicitud(
                     () => this.iniciarSesion(context), "Iniciar sesión"),
               ],

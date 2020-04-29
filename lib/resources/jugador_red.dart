@@ -26,6 +26,32 @@ class ProveedorJugador {
     }
   }
 
+  Future<JugadorModel> obtenerJugadoresEquipo(
+      String equipo) async {
+    List<Jugador> _jugadores = [];
+    var solicitudes;
+    http.Response responseJugadoresEquipo = await http.post(
+        'https://futmxpr.000webhostapp.com/app/getJugadoresEquipo.php',
+        body: {
+          "idEquipo": equipo,
+        });
+    int statusCode = responseJugadoresEquipo.statusCode;
+    if (statusCode == 200) {
+      // If the call to the server was successful, parse the JSON
+      if (responseJugadoresEquipo.body.length>2) {
+        solicitudes = JugadorModel.fromJson(
+            json.decode(responseJugadoresEquipo.body));
+      } else {
+        solicitudes = new JugadorModel(_jugadores);
+      }
+
+      return solicitudes;
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load post');
+    }
+  }
+
   Future anadirJugador(String cedula) async {
     http.Response response = await http.post(
       'https://futmxpr.000webhostapp.com/app/insertJugador.php',

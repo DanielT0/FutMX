@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:prueba_bd/models/posicion.dart';
 import 'package:prueba_bd/ui/screens/adminEquipo/interfazEventos.dart';
 import 'package:prueba_bd/blocs/bloc.dart';
 import 'package:prueba_bd/providers/estadoGlobal.dart';
+import 'package:prueba_bd/ui/Widgets/tablaPosiciones.dart';
 
 import 'dart:async';
 
@@ -23,21 +25,23 @@ class _principalJugadorState extends State<PrincipalJugador> {
   @override
   void initState() {
     this._page = 0;
+    bloc.obtenerSolicitudesJugadorEquipo(_equipo);
     super.initState();
-    _temporizador = Timer.periodic(
+    /**_temporizador = Timer.periodic(
       Duration(seconds: 2),
       (Timer t) {
         if (this.mounted) {
           if (_equipo.isNotEmpty) {
             setState(
               () {
-                bloc.obtenerSolicitudesJugadorEquipo(_equipo);
+                
               },
             );
           }
         }
       },
     );
+    **/
   }
 
   void _presionaOpcion(int index) {
@@ -76,6 +80,7 @@ class _principalJugadorState extends State<PrincipalJugador> {
   Widget build(BuildContext context) {
     var myProvider = Provider.of<EstadoGlobal>(context, listen: false);
     _equipo = myProvider.jugadorUser.equipo;
+    bloc.obtenerPosiciones(myProvider.equipo.idLiga);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -150,6 +155,22 @@ class _principalJugadorState extends State<PrincipalJugador> {
     switch (_page) {
       case 0:
         return InterfazEventosAdmin(); // En la opción 0 (eventos) se mostrarán los partidos a jugar y jugados por el equipo en su respectiva liga
+      case 1:
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: StreamBuilder(
+            stream: bloc.posiciones,
+            builder: (context, AsyncSnapshot<PosicionModel> snapshot) {
+              if (snapshot.hasData) {
+                TablaPosiciones tabla = new TablaPosiciones();
+                return tabla.buildList(snapshot, context);
+              } else if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+              return Center(child: CircularProgressIndicator());
+            },
+          ),
+        );
       default:
         return Container(
           child: Center(

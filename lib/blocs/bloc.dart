@@ -7,6 +7,7 @@ import 'package:prueba_bd/providers/estadoGlobal.dart';
 import 'package:prueba_bd/models/jugador.dart';
 import 'package:prueba_bd/models/adminEquipo.dart';
 import 'package:prueba_bd/models/equipo.dart';
+import 'package:prueba_bd/models/posicion.dart';
 
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -24,6 +25,8 @@ class Bloc {
 
   final _partidosFetcher = PublishSubject<PartidoModel>();
   final _anterioresPartidosFetcher = PublishSubject<PartidoModel>();
+  final _posicionesFetcher = PublishSubject<PosicionModel>();
+  final _jugadoresFetcher = PublishSubject<JugadorModel>();
 
   //Solicitudes Jugador
   Future addSolicitudJugador(
@@ -201,7 +204,6 @@ class Bloc {
             resp.nombre, resp.correo, respAdmin.equipo, resp.contrasena);
         myProvider.administradorUser = admin;
         myProvider.tipo = "Administrador Equipo";
-        print("huiaiuashuiyutvrcec5rvtbyycxcdtfvgyuh");
         var equipo = await this._repository.obtenerEquipoId(respAdmin.equipo);
         myProvider.equipo = equipo;
       }
@@ -247,6 +249,18 @@ class Bloc {
     var jugador = await _repository.insertJugador(
         cedula); // El código es muy parecido, sólo cambian las entidades
     return jugador;
+  }
+
+  Stream<JugadorModel> get jugadoresEquipo => _jugadoresFetcher.stream;
+
+  obtenerJugadoresEquipo(String equipo) async {
+    JugadorModel jugador =
+        await _repository.obtenerJugadoresEquipo(equipo);
+    _jugadoresFetcher.sink.add(jugador);
+  }
+
+  disposeJugadores() {
+    _jugadoresFetcher.close();
   }
 
   //Pedir todas las ligas
@@ -295,6 +309,18 @@ class Bloc {
 
   disposePartidos() {
     _partidosFetcher.close();
+  }
+
+  //Posiciones
+  Stream<PosicionModel> get posiciones => _posicionesFetcher.stream;
+
+  obtenerPosiciones(String idLiga) async {
+    PosicionModel posicion = await _repository.obtenerPosiciones(idLiga);
+    _posicionesFetcher.sink.add(posicion);
+  }
+
+  disposePosiciones() {
+    _posicionesFetcher.close();
   }
 }
 
