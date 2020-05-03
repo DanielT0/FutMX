@@ -6,6 +6,7 @@ import 'package:prueba_bd/ui/Widgets/principalAdmin/proximosPartidos.dart';
 import 'package:prueba_bd/ui/Widgets/principalAdmin/anterioresPartidos.dart';
 import 'package:prueba_bd/providers/estadoGlobal.dart';
 import 'package:prueba_bd/ui/Widgets/principalJugador/anterioresPartidos.dart';
+import 'package:prueba_bd/ui/screens/adminEquipo/payments.dart';
 
 class InterfazEventosAdmin extends StatefulWidget {
   @override
@@ -41,6 +42,14 @@ class _InterfazEventosAdminState extends State<InterfazEventosAdmin> {
     });
   }
 
+  void pagarPartido() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => new Payments(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var myProvider = Provider.of<EstadoGlobal>(context, listen: false);
@@ -57,7 +66,7 @@ class _InterfazEventosAdminState extends State<InterfazEventosAdmin> {
 
   Widget opcionVista() {
     switch (_opcion) {
-      case 0:
+      case 0:    // Se ven los n partidos anteriores y próximos del equipo
         return Column(
           children: <Widget>[
             Align(
@@ -79,7 +88,7 @@ class _InterfazEventosAdminState extends State<InterfazEventosAdmin> {
                 builder: (context, AsyncSnapshot<PartidoModel> snapshot) {
                   if (snapshot.hasData) {
                     ProximosPartidosList partidos =
-                        new ProximosPartidosList(() {});
+                        new ProximosPartidosList(pagarPartido);
                     return partidos.buildList(snapshot, context);
                   } else if (snapshot.hasError) {
                     return Text(snapshot.error.toString());
@@ -128,7 +137,7 @@ class _InterfazEventosAdminState extends State<InterfazEventosAdmin> {
           ],
         );
         break;
-      case 1:
+      case 1:    // se ven todos los próximos partidos en la interfaz
         return Column(
           children: <Widget>[
             Align(
@@ -162,7 +171,7 @@ class _InterfazEventosAdminState extends State<InterfazEventosAdmin> {
           ],
         );
         break;
-      case 2:
+      case 2:   // Se ven todos los partidos anteriores del equipo
         return Column(
           children: <Widget>[
             Align(

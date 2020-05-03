@@ -11,7 +11,7 @@ class ProveedorUsuario {
       print(cedula);
     var admin;
     http.Response response = await http.post(
-        'https://futmxpr.000webhostapp.com/app/getUsuarioCedula.php',
+        'https://futbolmx1.000webhostapp.com/app/getUsuarioCedula.php',
         body: {"Cedula": cedula});
     print(response.body);
     if (response.statusCode == 200) {
@@ -32,7 +32,7 @@ class ProveedorUsuario {
     
     var admin;
     http.Response response = await http.post(
-        'https://futmxpr.000webhostapp.com/app/getUsuarioCorreo.php',
+        'https://futbolmx1.000webhostapp.com/app/getUsuarioCorreo.php',
         body: {"Correo": correo});
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON

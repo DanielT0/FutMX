@@ -9,7 +9,7 @@ class ProveedorLigas {
   //Searches if query string was passed
   Future<LigaModel> obtenerListaLigas() async {
 
-    http.Response response = await http.get('https://futmxpr.000webhostapp.com/app/getAllLigas.php');
+    http.Response response = await http.get('https://futbolmx1.000webhostapp.com/app/getAllLigas.php');
     print(response.body);
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON

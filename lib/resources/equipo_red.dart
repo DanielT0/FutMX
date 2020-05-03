@@ -10,7 +10,7 @@ class ProveedorEquipo {
   Future<Equipo> obtenerEquipoNombre(String nombre) async {
     var admin;
     http.Response response = await http.post(
-        'https://futmxpr.000webhostapp.com/app/getEquipoNombre.php',
+        'https://futbolmx1.000webhostapp.com/app/getEquipoNombre.php',
         body: {"Nombre": nombre});
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON
@@ -28,7 +28,7 @@ class ProveedorEquipo {
   Future<Equipo> obtenerEquipoId(String id) async {
     var admin;
     http.Response response = await http.post(
-        'https://futmxpr.000webhostapp.com/app/getEquipoId.php',
+        'https://futbolmx1.000webhostapp.com/app/getEquipoId.php',
         body: {"idEquipo": id});
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON

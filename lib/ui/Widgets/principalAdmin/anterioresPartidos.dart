@@ -38,7 +38,7 @@ class AnterioresPartidosAdminList {
                         child: CircleAvatar(
                           radius: 25.0,
                           backgroundImage: NetworkImage(
-                              'https://futmxpr.000webhostapp.com/imagenes/' +
+                              'https://futbolmx1.000webhostapp.com/imagenes/' +
                                   myProvider.equipo.foto),
                         ),
                       ),
@@ -135,7 +135,7 @@ class AnterioresPartidosAdminList {
                         child: CircleAvatar(
                           radius: 25.0,
                           backgroundImage: NetworkImage(
-                              'https://futmxpr.000webhostapp.com/imagenes/' +
+                              'https://futbolmx1.000webhostapp.com/imagenes/' +
                                   snapshot.data.partidos[index]
                                       .fotoEquipoContrario),
                         ),

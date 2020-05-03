@@ -10,9 +10,9 @@ class ProveedorAdministradorEquipo {
   Future<AdministradorEquipo> obtenerAdminCedula(String cedula) async {
     var admin;
     http.Response response = await http.post(
-        'https://futmxpr.000webhostapp.com/app/getAdminEquipoCedula.php',
+        'https://futbolmx1.000webhostapp.com/app/getAdminEquipoCedula.php',
         body: {"Cedula": cedula});
-    print(response.body);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON
       if(json.decode(response.body)==false){
@@ -30,7 +30,7 @@ class ProveedorAdministradorEquipo {
   Future<AdministradorEquipo> obtenerAdminCorreo(String correo) async {
     var admin;
     http.Response response = await http.post(
-        'https://futmxpr.000webhostapp.com/app/getAdminEquipoCorreo.php',
+        'https://futbolmx1.000webhostapp.com/app/getAdminEquipoCorreo.php',
         body: {"Correo": correo});
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON

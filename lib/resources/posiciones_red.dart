@@ -9,7 +9,7 @@ class ProveedorPosiciones {
   //Searches if query string was passed
   Future<PosicionModel> obtenerPosiciones(String idLiga) async {
     http.Response response = await http.post(
-      'https://futmxpr.000webhostapp.com/app/getPosicionesLiga.php',
+      'https://futbolmx1.000webhostapp.com/app/getPosicionesLiga.php',
       body: {"idLiga": idLiga},
     );
     print(response.body);

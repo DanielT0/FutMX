@@ -31,7 +31,7 @@ class ProximosPartidosList {
                     child: CircleAvatar(
                       radius: 25.0,
                       backgroundImage: NetworkImage(
-                          'https://futmxpr.000webhostapp.com/imagenes/' +
+                          'https://futbolmx1.000webhostapp.com/imagenes/' +
                               snapshot
                                   .data.partidos[index].fotoEquipoContrario),
                     ),
@@ -82,7 +82,7 @@ class ProximosPartidosList {
                               iconSize: 32,
                               icon: Icon(Icons.monetization_on),
                               color: Colors.green,
-                              tooltip: 'Aceptar solicitud',
+                              tooltip: 'Pagar cuota',
                               onPressed: this.pagar,
                             ),
                             Text(

@@ -62,7 +62,7 @@ class TablaPosiciones {
                         CircleAvatar(
                           radius: 10.0,
                           backgroundImage: NetworkImage(
-                              'https://futmxpr.000webhostapp.com/imagenes/' +
+                              'https://futbolmx1.000webhostapp.com/imagenes/' +
                                   posicion.foto),
                         ),
                         SizedBox(

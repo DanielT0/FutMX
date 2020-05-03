@@ -7,7 +7,7 @@ class ProveedorSolicitudAdminEquipo {
   Future anadirSolicitudAdministradorEquipo(SolicitudAdministradorEquipo adminEquipo) async {
     // make POST request
     http.Response response = await http.post(
-      'https://futmxpr.000webhostapp.com/app/insertSolicitudAdminEquipo.php',
+      'https://futbolmx1.000webhostapp.com/app/insertSolicitudAdminEquipo.php',
       body: {
         "Cedula": adminEquipo.cedula,
         "Nombre": adminEquipo.nombre,

@@ -24,6 +24,7 @@ dependencies:
   rxdart: ^0.23.1    
   http: ^0.12.0
   curved_navigation_bar: ^0.3.2 #latest version
+  flutter_webview_plugin: ^0.3.11
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

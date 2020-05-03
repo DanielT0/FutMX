@@ -10,7 +10,7 @@ class ProveedorJugador {
   Future<Jugador> obtenerJugadorCedula(String cedula) async {
     var admin;
     http.Response response = await http.post(
-        'https://futmxpr.000webhostapp.com/app/getJugadorCedula.php',
+        'https://futbolmx1.000webhostapp.com/app/getJugadorCedula.php',
         body: {"Cedula": cedula});
     print(response.body);
     if (response.statusCode == 200) {
@@ -31,7 +31,7 @@ class ProveedorJugador {
     List<Jugador> _jugadores = [];
     var solicitudes;
     http.Response responseJugadoresEquipo = await http.post(
-        'https://futmxpr.000webhostapp.com/app/getJugadoresEquipo.php',
+        'https://futbolmx1.000webhostapp.com/app/getJugadoresEquipo.php',
         body: {
           "idEquipo": equipo,
         });
@@ -54,7 +54,7 @@ class ProveedorJugador {
 
   Future anadirJugador(String cedula) async {
     http.Response response = await http.post(
-      'https://futmxpr.000webhostapp.com/app/insertJugador.php',
+      'https://futbolmx1.000webhostapp.com/app/insertJugador.php',
       body: {
         "Cedula": cedula,
       },

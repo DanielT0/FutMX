@@ -3,6 +3,8 @@
 class PartidoModel {
   List<Partido> _partidos = [];
 
+  PartidoModel(this._partidos);
+  
   PartidoModel.fromJson(Map<String, dynamic> parsedJson) {
     print(parsedJson['partidos'].length);
     List<Partido> temp = [];

@@ -11,7 +11,7 @@ class ProveedorSolicitudesJugador {
     //Y aquí nos comunicamos con la base de datos
     http.Response response = await http.post(
       //Usamos la extensión http de dart, que nos permite hacer posts y gets en el servidor
-      'https://futmxpr.000webhostapp.com/app/insertSolicitudJugador2.php', //Insertamos el url de donde está la interacción con la base de datos (los insert, delete), o stored procedures
+      'https://futbolmx1.000webhostapp.com/app/insertSolicitudJugador2.php', //Insertamos el url de donde está la interacción con la base de datos (los insert, delete), o stored procedures
       body: {
         //En el caso de post, al utilizar php, asignamos los datos que se necesitan para hacer la transacción con la base de datos
         "Cedula": solicitudJugador.cedula,
@@ -38,7 +38,7 @@ class ProveedorSolicitudesJugador {
     //Y aquí nos comunicamos con la base de datos
     http.Response response = await http.post(
       //Usamos la extensión http de dart, que nos permite hacer posts y gets en el servidor
-      'https://futmxpr.000webhostapp.com/app/deleteSolicitudJugador.php', //Insertamos el url de donde está la interacción con la base de datos (los insert, delete), o stored procedures
+      'https://futbolmx1.000webhostapp.com/app/deleteSolicitudJugador.php', //Insertamos el url de donde está la interacción con la base de datos (los insert, delete), o stored procedures
       body: {
         //En el caso de post, al utilizar php, asignamos los datos que se necesitan para hacer la transacción con la base de datos
         "Cedula": cedula
@@ -56,7 +56,7 @@ class ProveedorSolicitudesJugador {
 
   Future obtenerJugador(controllerCedula) async {
     http.Response responseUsuarioInscrito = await http
-        .post('https://futmxpr.000webhostapp.com/app/getJugador.php', body: {
+        .post('https://futbolmx1.000webhostapp.com/app/getJugador.php', body: {
       "Cedula": controllerCedula.text,
     });
     int statusCode = responseUsuarioInscrito.statusCode;
@@ -73,14 +73,14 @@ class ProveedorSolicitudesJugador {
       String equipo) async {
     List<SolicitudJugador> _solicitudesJugador = [];
     var solicitudes;
+    print(equipo);
+    print('ygbuhvygbhuvybuh');
     http.Response responseSolicitudesJugadorEquipo = await http.post(
-        'https://futmxpr.000webhostapp.com/app/getSolicitudesJugadorEquipo.php',
+        'https://futbolmx1.000webhostapp.com/app/getSolicitudesJugadorEquipo.php',
         body: {
           "Equipo": equipo,
         });
     int statusCode = responseSolicitudesJugadorEquipo.statusCode;
-    var data = jsonDecode(responseSolicitudesJugadorEquipo.body);
-    var respuestaUsuario = data.toString();
     if (statusCode == 200) {
       // If the call to the server was successful, parse the JSON
       print(responseSolicitudesJugadorEquipo.body.length);
