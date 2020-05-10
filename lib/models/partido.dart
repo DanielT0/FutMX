@@ -31,6 +31,8 @@ class Partido {
   String _hora;
   String _golesEquipoA;
   String _golesEquipoB;
+  String _pagoA;
+  String _pagoB;
 
   Partido(resultado){
     this._idLiga=resultado['idLiga'];
@@ -46,6 +48,8 @@ class Partido {
     this._hora = resultado['Hora'];
     this._golesEquipoA = resultado['GolesEquipoA'];
     this._golesEquipoB = resultado['GolesEquipoB'];
+    this._pagoA = resultado['PagoA'];
+    this._pagoB = resultado['PagoB'];
   } //Constructor
 
  //Getters
@@ -63,6 +67,8 @@ class Partido {
   String get hora => this._hora;
   String get golesEquipoA => this._golesEquipoA;
   String get golesEquipoB => this._golesEquipoB;
+  String get pagoA => this._pagoA;
+  String get pagoB => this._pagoB;
 
  //Setters
   set idLiga(String idLiga) => this._idLiga = idLiga;
@@ -77,4 +83,6 @@ class Partido {
   set hora (String hora) => this._hora =hora;
   set golesEquipoA (String golesEquipoA) => this._golesEquipoA =golesEquipoA;
   set golesEquipoB (String golesEquipoB) => this._golesEquipoB =golesEquipoB;
-}
+  set pagoA (String pagoA) => this._pagoA= pagoA;
+  set pagoB (String pagoB) => this._pagoB= pagoB;
+  }

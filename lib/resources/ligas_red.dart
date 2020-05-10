@@ -21,4 +21,23 @@ class ProveedorLigas {
       throw Exception('Failed to load post');
     }
   }
+
+  Future<Liga> obtenerLigaId(String id) async {
+    var liga;
+    http.Response response = await http.post(
+        'https://futbolmx1.000webhostapp.com/app/getLigaId.php',
+        body: {"idLiga": id});
+    print(response.body);
+    if (response.statusCode == 200) {
+      // If the call to the server was successful, parse the JSON
+      if (json.decode(response.body) == false) {
+        liga = null;
+      } else
+        liga = Liga.fromJson(json.decode(response.body));
+      return liga;
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load post');
+    }
+  }
 }

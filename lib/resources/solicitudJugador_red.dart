@@ -73,8 +73,6 @@ class ProveedorSolicitudesJugador {
       String equipo) async {
     List<SolicitudJugador> _solicitudesJugador = [];
     var solicitudes;
-    print(equipo);
-    print('ygbuhvygbhuvybuh');
     http.Response responseSolicitudesJugadorEquipo = await http.post(
         'https://futbolmx1.000webhostapp.com/app/getSolicitudesJugadorEquipo.php',
         body: {

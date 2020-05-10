@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:prueba_bd/models/equipo.dart';
 
+import 'package:prueba_bd/models/equipo.dart';
+import 'package:prueba_bd/models/liga.dart';
 import 'package:prueba_bd/models/jugador.dart';
 import 'package:prueba_bd/models/adminEquipo.dart';
 
@@ -15,8 +16,18 @@ class EstadoGlobal with ChangeNotifier {
 //Creamos una claSe "EstadoGlobal" y le agregamos las capacidades de Change Notifier.
 Jugador _userJugador;      //Objeto que representa al jugador que ha iniciado sesión
 AdministradorEquipo _userAdmin;     //Objeto que representa al admin que ha iniciado sesión
-String _tipo;
-Equipo _equipo;
+String _tipo;            // Sabremos el tipo de usuario que es
+Equipo _equipo;            //Objeto que representa al equipo al que pertenece el usuario
+Liga _liga;              //Objeto que representa a la liga en la que juega el usuario
+
+String _idPartido;    //Datos dados para administrar el pago 
+
+String get partido => _idPartido;
+
+set partido(String partido){
+  _idPartido=partido;
+  notifyListeners();
+}
 
 String get tipo => _tipo;              //Con él sabremos qué tipo de usuario está navegando
 
@@ -43,6 +54,13 @@ Equipo get equipo => _equipo;
 
 set equipo(Equipo equipo){
   _equipo = equipo;
+  notifyListeners();
+}
+
+Liga get liga => _liga;
+
+set liga(Liga liga){
+  _liga = liga;
   notifyListeners();
 }
 

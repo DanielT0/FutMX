@@ -26,6 +26,12 @@ class Liga {
     this._precio=resultado['PrecioArbitraje'];
   } //Constructor
 
+  Liga.fromJson(Map<String, dynamic> parsedJson) {
+    this._idLiga=parsedJson['idLiga'];
+    this._nombre= parsedJson['NombreLiga'];
+    this._precio=parsedJson['PrecioArbitraje'];
+  }
+
  //Getters
   String get idLiga => this._idLiga;
   String get nombre => this._nombre;

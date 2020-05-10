@@ -43,6 +43,7 @@ class _InterfazEventosAdminState extends State<InterfazEventosAdmin> {
   }
 
   void pagarPartido() {
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (BuildContext context) => new Payments(),
@@ -88,7 +89,7 @@ class _InterfazEventosAdminState extends State<InterfazEventosAdmin> {
                 builder: (context, AsyncSnapshot<PartidoModel> snapshot) {
                   if (snapshot.hasData) {
                     ProximosPartidosList partidos =
-                        new ProximosPartidosList(pagarPartido);
+                        new ProximosPartidosList(pagarPartido, this.bloc);
                     return partidos.buildList(snapshot, context);
                   } else if (snapshot.hasError) {
                     return Text(snapshot.error.toString());
@@ -159,7 +160,7 @@ class _InterfazEventosAdminState extends State<InterfazEventosAdmin> {
                 builder: (context, AsyncSnapshot<PartidoModel> snapshot) {
                   if (snapshot.hasData) {
                     ProximosPartidosList partidos =
-                        new ProximosPartidosList(() {});
+                        new ProximosPartidosList(pagarPartido, this.bloc);
                     return partidos.buildList(snapshot, context);
                   } else if (snapshot.hasError) {
                     return Text(snapshot.error.toString());

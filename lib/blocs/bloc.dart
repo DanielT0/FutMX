@@ -198,6 +198,10 @@ class Bloc {
         myProvider.tipo = "Jugador";
         var equipo = await this._repository.obtenerEquipoId(respJugador.equipo);
         myProvider.equipo = equipo;
+        var liga = await this._repository.obtenerLigaId(equipo.idLiga);
+        myProvider.liga = liga;
+        print('auhasbugfdrctfvgybuhnbgvfcdxrdqqqqqqqqqqqqqqqqqq');
+        print(myProvider.equipo.nombre);
       } else {
         var respAdmin = await this._repository.obtenerAdminCedula(resp.cedula);
         AdministradorEquipo admin = new AdministradorEquipo(resp.cedula,
@@ -206,6 +210,11 @@ class Bloc {
         myProvider.tipo = "Administrador Equipo";
         var equipo = await this._repository.obtenerEquipoId(respAdmin.equipo);
         myProvider.equipo = equipo;
+        var liga = await this._repository.obtenerLigaId(equipo.idLiga);
+        myProvider.liga = liga;
+        print('auhasbugfdrctfvgybuhnbgvfcdxrdqqqqqqqqqqqqqqqqqq');
+        print(myProvider.liga.precio);
+        print(myProvider.equipo.nombre);
       }
     } else {
       respuesta = false;
@@ -288,6 +297,11 @@ class Bloc {
   }
 
   //Partidos
+
+  Future prepararDatosPago(String partido, String equipo, String cuota) async{
+    var preparar = _repository.prepararDatosPago(partido, equipo, cuota);
+    return preparar;
+  }
   Stream<PartidoModel> get proximosPartidos => _partidosFetcher.stream;
 
   Stream<PartidoModel> get anterioresPartidos =>

@@ -32,6 +32,9 @@ class RepositoryAll {
   //Ligas
   Future<LigaModel> obtenerAllLigas() => gestorLigas.obtenerListaLigas();
 
+  Future<Liga> obtenerLigaId(String id) =>
+      gestorLigas.obtenerLigaId(id);
+
   //Solicitud Jugador
   Future insertSolicitudJugador(SolicitudJugador solicitud) {
     //Es algo parecido a lo que hace el bloc, pero sin await, llama directamente a quien interactua con los datos (por lo que interactuan con los datos por medio de la red... llevaran red en el nombre)
@@ -91,6 +94,8 @@ class RepositoryAll {
   Future<PartidoModel> obtenerAnterioresPartidos(String idEquipo) =>
       gestorPartidos.obtenerAnterioresPartidos(idEquipo);
 
+  Future prepararDatosPago(String partido, String equipo, String cuota) =>
+    gestorPartidos.prepararDatosPago(partido, equipo, cuota);
   //Posiciones
   Future<PosicionModel> obtenerPosiciones(String idLiga) =>
       gestorPosiciones.obtenerPosiciones(idLiga);
