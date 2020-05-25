@@ -19,6 +19,7 @@ AdministradorEquipo _userAdmin;     //Objeto que representa al admin que ha inic
 String _tipo;            // Sabremos el tipo de usuario que es
 Equipo _equipo;            //Objeto que representa al equipo al que pertenece el usuario
 Liga _liga;              //Objeto que representa a la liga en la que juega el usuario
+bool _errorServidor=false;            //True si existe un error de servidor, false si no
 
 String _idPartido;    //Datos dados para administrar el pago 
 
@@ -70,6 +71,13 @@ int get usuario => _usuario; //Creamos el método Get, para poder obtener el val
 set usuario(int newUsuario) {
 _usuario = newUsuario; //actualizamos el valor
 notifyListeners(); //notificamos a los widgets que esten escuchando el stream.
+}
+
+bool get errorServidor => _errorServidor;
+
+set errorServidor(bool error){
+  _errorServidor=error;
+  notifyListeners();
 }
 
 }

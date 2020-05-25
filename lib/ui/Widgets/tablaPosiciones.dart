@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:prueba_bd/Response/ApiResponse.dart';
 import 'package:prueba_bd/models/posicion.dart';
 
 class TablaPosiciones {
-  Widget buildList(
-      AsyncSnapshot<PosicionModel> snapshot, BuildContext context) {
+  Widget buildList(AsyncSnapshot<ApiResponse<PosicionModel>> snapshot,
+      BuildContext context) {
     return DataTable(
       columnSpacing: 10,
       columns: [
@@ -14,7 +16,10 @@ class TablaPosiciones {
           ),
         ),
         DataColumn(
-          label: Text("Equipo", textAlign: TextAlign.center,),
+          label: Text(
+            "Equipo",
+            textAlign: TextAlign.center,
+          ),
         ),
         DataColumn(
           label: Text("Partidos Jugados"),
@@ -41,7 +46,7 @@ class TablaPosiciones {
           label: Text("PTS"),
         ),
       ],
-      rows: snapshot.data.posiciones
+      rows: snapshot.data.data.posiciones
           .map(
             (posicion) => DataRow(
               cells: [
@@ -49,8 +54,14 @@ class TablaPosiciones {
                   Container(
                     alignment: Alignment.center,
                     child: Text(
-                      (snapshot.data.posiciones.indexOf(posicion) + 1)
+                      (snapshot.data.data.posiciones.indexOf(posicion) + 1)
                           .toString(),
+                      style: TextStyle(
+                          color:
+                              snapshot.data.data.posiciones.indexOf(posicion) <
+                                      8
+                                  ? Colors.green
+                                  : Colors.black),
                     ),
                   ),
                 ),
@@ -59,16 +70,36 @@ class TablaPosiciones {
                     alignment: Alignment.center,
                     child: Row(
                       children: <Widget>[
-                        CircleAvatar(
-                          radius: 10.0,
-                          backgroundImage: NetworkImage(
+                        CachedNetworkImage(
+                          imageUrl:
                               'https://futbolmx1.000webhostapp.com/imagenes/' +
-                                  posicion.foto),
+                                  posicion.foto,
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 20.0,
+                            height: 20.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
                         ),
                         SizedBox(
-                          width: 3,
+                          width: 5,
                         ),
-                        Text(posicion.equipo),
+                        Text(
+                          posicion.equipo,
+                          style: TextStyle(
+                              color: snapshot.data.data.posiciones
+                                          .indexOf(posicion) <
+                                      8
+                                  ? Colors.green
+                                  : Colors.black),
+                        ),
                       ],
                     ),
                   ),
@@ -76,51 +107,115 @@ class TablaPosiciones {
                 DataCell(
                   Container(
                     alignment: Alignment.center,
-                    child: Text(posicion.jugados),
+                    child: Text(
+                      posicion.jugados,
+                      style: TextStyle(
+                          color:
+                              snapshot.data.data.posiciones.indexOf(posicion) <
+                                      8
+                                  ? Colors.green
+                                  : Colors.black),
+                    ),
                   ),
                 ),
                 DataCell(
                   Container(
                     alignment: Alignment.center,
-                    child: Text(posicion.ganados),
+                    child: Text(
+                      posicion.ganados,
+                      style: TextStyle(
+                          color:
+                              snapshot.data.data.posiciones.indexOf(posicion) <
+                                      8
+                                  ? Colors.green
+                                  : Colors.black),
+                    ),
                   ),
                 ),
                 DataCell(
                   Container(
                     alignment: Alignment.center,
-                    child: Text(posicion.empatados),
+                    child: Text(
+                      posicion.empatados,
+                      style: TextStyle(
+                          color:
+                              snapshot.data.data.posiciones.indexOf(posicion) <
+                                      8
+                                  ? Colors.green
+                                  : Colors.black),
+                    ),
                   ),
                 ),
                 DataCell(
                   Container(
                     alignment: Alignment.center,
-                    child: Text(posicion.perdidos),
+                    child: Text(
+                      posicion.perdidos,
+                      style: TextStyle(
+                          color:
+                              snapshot.data.data.posiciones.indexOf(posicion) <
+                                      8
+                                  ? Colors.green
+                                  : Colors.black),
+                    ),
                   ),
                 ),
                 DataCell(
                   Container(
                     alignment: Alignment.center,
-                    child: Text(posicion.golesFavor),
+                    child: Text(
+                      posicion.golesFavor,
+                      style: TextStyle(
+                          color:
+                              snapshot.data.data.posiciones.indexOf(posicion) <
+                                      8
+                                  ? Colors.green
+                                  : Colors.black),
+                    ),
                   ),
                 ),
                 DataCell(
                   Container(
                     alignment: Alignment.center,
-                    child: Text(posicion.golesContra),
+                    child: Text(
+                      posicion.golesContra,
+                      style: TextStyle(
+                          color:
+                              snapshot.data.data.posiciones.indexOf(posicion) <
+                                      8
+                                  ? Colors.green
+                                  : Colors.black),
+                    ),
                   ),
                 ),
                 DataCell(
                   Container(
                     alignment: Alignment.center,
-                    child: Text((int.parse(posicion.golesFavor) -
-                            int.parse(posicion.golesContra))
-                        .toString()),
+                    child: Text(
+                      (int.parse(posicion.golesFavor) -
+                              int.parse(posicion.golesContra))
+                          .toString(),
+                      style: TextStyle(
+                          color:
+                              snapshot.data.data.posiciones.indexOf(posicion) <
+                                      8
+                                  ? Colors.green
+                                  : Colors.black),
+                    ),
                   ),
                 ),
                 DataCell(
                   Container(
                     alignment: Alignment.center,
-                    child: Text(posicion.puntos),
+                    child: Text(
+                      posicion.puntos,
+                      style: TextStyle(
+                          color:
+                              snapshot.data.data.posiciones.indexOf(posicion) <
+                                      8
+                                  ? Colors.green
+                                  : Colors.black),
+                    ),
                   ),
                 ),
               ],

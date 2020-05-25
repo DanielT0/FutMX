@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:prueba_bd/ui/screens/adminEquipo/principalAdmin.dart';
+import 'package:prueba_bd/ui/screens/interfazInicioSesion.dart';
+import 'package:prueba_bd/ui/screens/interfazRegistro.dart';
+import 'package:prueba_bd/ui/screens/jugador/principalJugador.dart';
 import './ui/screens/home.dart';
 
 import 'package:prueba_bd/providers/estadoGlobal.dart';
@@ -25,7 +29,14 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),
-        home: Home(),                 // Iniciamos con Home (ui/screens/home.dart)
+        initialRoute: '/',
+        routes: {
+          '/': (context) => Home(), // Iniciamos con Home (ui/screens/home.dart)
+          '/InicioSesion': (context) => interfazInicioSesion(),
+          '/Registro': (context) => interfazRegistro(),
+          '/InicioSesion/PrincipalAdmin': (context) => PrincipalAdmin(),
+          '/InicioSesion/PrincipalJugador': (context) => PrincipalJugador(),
+        },
       ),
     );
   }

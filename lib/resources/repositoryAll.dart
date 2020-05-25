@@ -32,8 +32,7 @@ class RepositoryAll {
   //Ligas
   Future<LigaModel> obtenerAllLigas() => gestorLigas.obtenerListaLigas();
 
-  Future<Liga> obtenerLigaId(String id) =>
-      gestorLigas.obtenerLigaId(id);
+  Future<Liga> obtenerLigaId(String id) => gestorLigas.obtenerLigaId(id);
 
   //Solicitud Jugador
   Future insertSolicitudJugador(SolicitudJugador solicitud) {
@@ -65,6 +64,37 @@ class RepositoryAll {
   Future<Usuario> obtenerUsuarioCorreo(String correo) =>
       gestorUsuarios.obtenerUsuarioCorreo(correo);
 
+  Future updateCedulaUsuario(String idAntig, String idNew) {
+    var resp = gestorUsuarios.anadirSolicitudCedula(idAntig, idNew);
+    return resp;
+  }
+
+  Future updateNombreUsuario(String id, String nombre) {
+    var resp = gestorUsuarios.anadirSolicitudNombre(id, nombre);
+    return resp;
+  }
+
+  Future updateCorreoUsuario(String id, String correo) {
+    var resp = gestorUsuarios.updateCorreoUsuario(id, correo);
+    return resp;
+  }
+
+  Future updateContrasenaUsuario(String id, String contrasena) {
+    var resp = gestorUsuarios.updateContrasenaUsuario(id, contrasena);
+    return resp;
+  }
+
+  Future updateImageUsuario(String id, String image) {
+    var resp = gestorUsuarios.updateImageUsuario(id, image);
+    return resp;
+  }
+
+//------------Multifunction-----------------------------------
+  Future uploadImage(String id, String base64Image, String fileName) {
+    var resp = gestorUsuarios.uploadImage(id, base64Image, fileName);
+    return resp;
+  }
+
   //Admin
   Future<AdministradorEquipo> obtenerAdminCedula(String cedula) =>
       gestorAdminEquipo.obtenerAdminCedula(cedula);
@@ -72,14 +102,25 @@ class RepositoryAll {
   Future<AdministradorEquipo> obtenerAdminCorreo(String correo) =>
       gestorAdminEquipo.obtenerAdminCorreo(correo);
 
+  Future updateAdminEquipo(String id, AdministradorEquipo admin) {
+    var resp = gestorAdminEquipo.actualizarAdministradorEquipo(id, admin);
+    return resp;
+  }
+
   //Jugador
   Future<Jugador> obtenerJugadorCedula(String cedula) =>
       gestorJugadores.obtenerJugadorCedula(cedula);
+
+  Future<Jugador> obtenerJugadorNumero(String numero, String equipo) =>
+      gestorJugadores.obtenerJugadorNumero(numero, equipo);
 
   Future<JugadorModel> obtenerJugadoresEquipo(String idEquipo) =>
       gestorJugadores.obtenerJugadoresEquipo(idEquipo);
 
   Future insertJugador(String cedula) => gestorJugadores.anadirJugador(cedula);
+
+  Future updateNumeroJugador(String cedula, String numero) =>
+      gestorJugadores.updateNumeroJugador(cedula, numero);
 
   //Equipo
   Future<Equipo> obtenerEquipoNombre(String nombre) =>
@@ -87,6 +128,22 @@ class RepositoryAll {
 
   Future<Equipo> obtenerEquipoId(String id) =>
       gestorEquipos.obtenerEquipoId(id);
+
+  Future updateNombreEquipo(String idEquipo, String newNombre) {
+    var resp = gestorEquipos.updateNombreEquipo(idEquipo, newNombre);
+    return resp;
+  }
+
+  Future deleteEquipo(String idEquipo) {
+    var resp = gestorEquipos.deleteEquipo(idEquipo);
+    return resp;
+  }
+
+  Future updateImageEquipo(String id, String image) {
+    var resp = gestorEquipos.updateImageEquipo(id, image);
+    return resp;
+  }
+
   //Partido
   Future<PartidoModel> obtenerProximosPartidos(String idEquipo) =>
       gestorPartidos.obtenerProximosPartidos(idEquipo);
@@ -95,7 +152,7 @@ class RepositoryAll {
       gestorPartidos.obtenerAnterioresPartidos(idEquipo);
 
   Future prepararDatosPago(String partido, String equipo, String cuota) =>
-    gestorPartidos.prepararDatosPago(partido, equipo, cuota);
+      gestorPartidos.prepararDatosPago(partido, equipo, cuota);
   //Posiciones
   Future<PosicionModel> obtenerPosiciones(String idLiga) =>
       gestorPosiciones.obtenerPosiciones(idLiga);

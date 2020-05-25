@@ -7,6 +7,7 @@ import 'package:prueba_bd/models/solicitudJugador.dart';
 // Clase para gestionar (hacer operaciones CRUD) de datos en la base de datos, comunicandose con el servidor
 
 class ProveedorSolicitudesJugador {
+  
   Future anadirSolicitudJugador(SolicitudJugador solicitudJugador) async {
     //Y aquí nos comunicamos con la base de datos
     http.Response response = await http.post(

@@ -42,4 +42,56 @@ class ProveedorEquipo {
       throw Exception('Failed to load post');
     }
   }
+
+  Future updateNombreEquipo(String idEquipo, String newNombre) async {
+    // make POST request
+    http.Response response = await http.post(
+      'https://futbolmx1.000webhostapp.com/app/insertSolicitudActualizacionEquipo.php',
+      body: {
+        "idEquipo": idEquipo,
+        "Nombre": newNombre,
+      },
+    );
+    String body = response.body;
+    print(body);
+    if (response.statusCode == 200) {
+      return body;
+    } else {
+      throw Exception('Error al conectar con el servidor');
+    }
+  }
+
+  Future deleteEquipo(String idEquipo) async {
+    // make POST request
+    http.Response response = await http.post(
+      'https://futbolmx1.000webhostapp.com/app/insertSolicitudEliminacionEquipo.php',
+      body: {
+        "idEquipo": idEquipo,
+      },
+    );
+    String body = response.body;
+    print(body);
+    if (response.statusCode == 200) {
+      return body;
+    } else {
+      throw Exception('Error al conectar con el servidor');
+    }
+  }
+
+  Future updateImageEquipo(String id, String image) async {
+    // make POST request
+    http.Response response = await http.post(
+      'https://futbolmx1.000webhostapp.com/app/updateImageEquipo.php',
+      body: {
+        "Equipo": id,
+        "Image": image,
+      },
+    );
+    String body = response.body;
+    if (response.statusCode == 200) {
+      return body;
+    } else {
+      throw Exception('Error al conectar con el servidor');
+    }
+  }
 }

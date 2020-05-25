@@ -26,8 +26,9 @@ class Jugador {
   String _equipo;
   String _numero;
   String _contrasena;
+  String _foto;
 
-  Jugador(this._cedula, this._nombre, this._correo, this._equipo, this._numero, this._contrasena); //Constructor
+  Jugador(this._cedula, this._nombre, this._correo, this._equipo, this._numero, this._contrasena, this._foto); //Constructor
 
   Jugador.fromJson(Map<String, dynamic> parsedJson) { //Constructor con Json
     this._cedula = parsedJson['Cedula'];
@@ -36,6 +37,7 @@ class Jugador {
     this._equipo = parsedJson['Id_Equipo'];
     this._numero = parsedJson['Numero'];
     this._contrasena = parsedJson['Contraseña'];
+    this._foto=parsedJson['Foto'];
   }
  //Getters
   String get cedula => this._cedula;
@@ -44,12 +46,14 @@ class Jugador {
   String get equipo => this._equipo;
   String get numero => this._numero;
   String get contrasena => this._contrasena;
+  String get foto => this._foto;
 
  //Setters
   set cedula(String cedula) => this._cedula = cedula;
-  set nombre (String nombre) => this._nombre = nombre;
-  set correo (String correo) => this._correo =correo;
-  set equipo (String equipo) => this._equipo = equipo;
+  set nombre(String nombre) => this._nombre = nombre;
+  set correo(String correo) => this._correo =correo;
+  set equipo(String equipo) => this._equipo = equipo;
   set numero(String numero) => this._numero = numero;
-  set contrasena (String contrasena) => this.contrasena;
+  set contrasena(String contrasena) => this._contrasena = contrasena;
+  set foto(String foto) => this._foto = foto;
 }

@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -22,10 +22,16 @@ dependencies:
 
   provider: ^4.0.4
   rxdart: ^0.23.1    
-  http: ^0.12.0
+  http: ^0.12.0                   #Con él podremos comunicarnos con el servidor
   curved_navigation_bar: ^0.3.2 #latest version
-  flutter_webview_plugin: ^0.3.11
-
+  flutter_webview_plugin: ^0.3.11     #Dado para mostrar la interfaz web que tenemos de paypal
+  flutter_screenutil: ^1.0.2
+  carousel_slider: ^1.3.0            #Extensión del carousel de imágenes del principio
+  animated_text_kit: ^2.0.0         
+  rflutter_alert: ^1.0.3            #Al utilizarlo nos permite mostrar alertas 
+  flushbar: ^1.10.4
+  cached_network_image: ^2.2.0+1       #Widget para preestablecer iconos cuando una imagen de la web se está cargando
+  image_picker: ^0.6.5           #Widget para escoger la imagen
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
@@ -33,14 +39,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_screenutil: ^1.0.2
-  carousel_slider: ^1.3.0
-  animated_text_kit: ^2.0.0
-  rflutter_alert: ^1.0.3
-  flushbar : 
-    git:
-      url: git://github.com/valterh4ck3r/flushbar
-      ref: master
 
 
 # For information on the generic Dart part of this file, see the

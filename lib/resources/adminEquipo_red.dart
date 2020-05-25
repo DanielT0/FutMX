@@ -46,4 +46,24 @@ class ProveedorAdministradorEquipo {
       throw Exception('Failed to load post');
     }
   }
+
+  Future actualizarAdministradorEquipo(String id, AdministradorEquipo adminEquipo) async {
+    // make POST request
+    http.Response response = await http.post(
+      'https://futbolmx1.000webhostapp.com/app/insertSolicitudAdminEquipo.php',
+      body: {
+        "Antig": id,
+        "Cedula": adminEquipo.cedula,
+        "Nombre": adminEquipo.nombre,
+        "Correo": adminEquipo.correo,
+        "Contrasena": adminEquipo.contrasena
+      },
+    );
+    String body = response.body;
+    if (response.statusCode == 200) {
+      return body;
+    } else {
+      throw Exception('Error al conectar con el servidor');
+    }
+  }
 }

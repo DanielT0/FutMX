@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:prueba_bd/Response/ApiResponse.dart';
 import 'package:prueba_bd/models/partido.dart';
 import 'package:prueba_bd/providers/estadoGlobal.dart';
 import 'package:prueba_bd/blocs/bloc.dart';
@@ -9,10 +11,12 @@ class ProximosPartidosList {
   final Bloc bloc;
   ProximosPartidosList(this.pagar, this.bloc);
 
-  Widget buildList(AsyncSnapshot<PartidoModel> snapshot, BuildContext context) {
+  Widget buildList(
+      AsyncSnapshot<ApiResponse<PartidoModel>> snapshot, BuildContext context) {
     var myProvider = Provider.of<EstadoGlobal>(context, listen: false);
     return ListView.builder(
-      itemCount: snapshot.data.partidos
+      physics: const BouncingScrollPhysics(),
+      itemCount: snapshot.data.data.partidos
           .length, //El programa tiene que saber cuantos items ha de mostrar en la lista
       itemBuilder: (BuildContext context, int index) {
         return Container(
@@ -30,12 +34,23 @@ class ProximosPartidosList {
               children: <Widget>[
                 Expanded(
                   child: Center(
-                    child: CircleAvatar(
-                      radius: 25.0,
-                      backgroundImage: NetworkImage(
+                    child: CachedNetworkImage(
+                      imageUrl:
                           'https://futbolmx1.000webhostapp.com/imagenes/' +
-                              snapshot
-                                  .data.partidos[index].fotoEquipoContrario),
+                              snapshot.data.data.partidos[index]
+                                  .fotoEquipoContrario,
+                      imageBuilder: (context, imageProvider) => Container(
+                        width: 55.0,
+                        height: 55.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
+                      ),
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
                   ),
                 ),
@@ -48,7 +63,8 @@ class ProximosPartidosList {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.35,
                       child: Text(
-                        snapshot.data.partidos[index].nombreEquipoContrario,
+                        snapshot
+                            .data.data.partidos[index].nombreEquipoContrario,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -59,18 +75,18 @@ class ProximosPartidosList {
                       height: 3,
                     ),
                     Text(
-                      snapshot.data.partidos[index].ciudad +
+                      snapshot.data.data.partidos[index].ciudad +
                           ', ' +
-                          snapshot.data.partidos[index].ubicacion,
+                          snapshot.data.data.partidos[index].ubicacion,
                       style: TextStyle(fontSize: 10, color: Colors.blueGrey),
                     ),
                     SizedBox(
                       height: 3,
                     ),
                     Text(
-                      snapshot.data.partidos[index].fecha +
+                      snapshot.data.data.partidos[index].fecha +
                           ', ' +
-                          snapshot.data.partidos[index].hora,
+                          snapshot.data.data.partidos[index].hora,
                       style: TextStyle(fontSize: 10, color: Colors.blueGrey),
                     ),
                   ],
@@ -81,30 +97,30 @@ class ProximosPartidosList {
                       ? Container()
                       : myProvider.administradorUser
                                   .equipo == // Si el id Es del equipo A se hace validación de pago del mismo
-                              snapshot.data.partidos[index].idEquipoA
+                              snapshot.data.data.partidos[index].idEquipoA
                           ? Column(
                               children: <Widget>[
                                 IconButton(
                                     iconSize: 32,
-                                    icon: snapshot.data.partidos[index].pagoA ==
+                                    icon: snapshot.data.data.partidos[index]
+                                                .pagoA ==
                                             '0' //Si no está pago, mostrar opción de pago
                                         ? Icon(Icons.monetization_on)
                                         : Icon(Icons.check_box),
                                     color: Colors.green,
                                     tooltip: 'Pagar cuota',
-                                    onPressed:
-                                        snapshot.data.partidos[index].pagoA ==
-                                                '0'
-                                            ? () {
-                                                myProvider.partido = snapshot
-                                                    .data
-                                                    .partidos[index]
-                                                    .idPartido;
-                                                this.pagar();
-                                              }
-                                            : () => {}),
+                                    onPressed: snapshot.data.data
+                                                .partidos[index].pagoA ==
+                                            '0'
+                                        ? () {
+                                            myProvider.partido = snapshot.data
+                                                .data.partidos[index].idPartido;
+                                            this.pagar();
+                                          }
+                                        : () => {}),
                                 Text(
-                                  snapshot.data.partidos[index].pagoA == '0'
+                                  snapshot.data.data.partidos[index].pagoA ==
+                                          '0'
                                       ? 'Pagar'
                                       : 'Pago',
                                   style: TextStyle(
@@ -118,25 +134,25 @@ class ProximosPartidosList {
                               children: <Widget>[
                                 IconButton(
                                     iconSize: 32,
-                                    icon: snapshot.data.partidos[index].pagoB ==
+                                    icon: snapshot.data.data.partidos[index]
+                                                .pagoB ==
                                             '0' //Si no está pago, mostrar opción de pago
                                         ? Icon(Icons.monetization_on)
                                         : Icon(Icons.check_box),
                                     color: Colors.green,
                                     tooltip: 'Pagar cuota',
-                                    onPressed:
-                                        snapshot.data.partidos[index].pagoB ==
-                                                '0'
-                                            ? () {
-                                                myProvider.partido = snapshot
-                                                    .data
-                                                    .partidos[index]
-                                                    .idPartido;
-                                                this.pagar();
-                                              }
-                                            : () => {}),
+                                    onPressed: snapshot.data.data
+                                                .partidos[index].pagoB ==
+                                            '0'
+                                        ? () {
+                                            myProvider.partido = snapshot.data
+                                                .data.partidos[index].idPartido;
+                                            this.pagar();
+                                          }
+                                        : () => {}),
                                 Text(
-                                  snapshot.data.partidos[index].pagoB == '0'
+                                  snapshot.data.data.partidos[index].pagoB ==
+                                          '0'
                                       ? 'Pagar'
                                       : 'Pago',
                                   style: TextStyle(

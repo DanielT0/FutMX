@@ -109,12 +109,7 @@ class _HomeState extends State<Home> {
                     width: 270,
                     height: 45,
                     child: RaisedButton(
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              new interfazInicioSesion(),
-                        ),
-                      ),
+                      onPressed: () => Navigator.pushNamed(context, '/InicioSesion'),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -129,12 +124,7 @@ class _HomeState extends State<Home> {
                     height: 5,
                   ),
                   FlatButton(
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            new interfazRegistro(),
-                      ),
-                    ),
+                    onPressed: () => Navigator.pushNamed(context, '/Registro'),
                     child: Text(
                       'Registrarse',
                       style: TextStyle(decoration: TextDecoration.underline),

@@ -26,8 +26,29 @@ class ProveedorJugador {
     }
   }
 
-  Future<JugadorModel> obtenerJugadoresEquipo(
-      String equipo) async {
+  Future<Jugador> obtenerJugadorNumero(String numero, String equipo) async {
+    var jugador;
+    http.Response response = await http.post(
+        'https://futbolmx1.000webhostapp.com/app/getJugadorNumeroEquipo.php',
+        body: {
+          "Numero": numero,
+          "Equipo": equipo,
+        });
+    print(response.body);
+    if (response.statusCode == 200) {
+      // If the call to the server was successful, parse the JSON
+      if (json.decode(response.body) == false) {
+        jugador = null;
+      } else
+        jugador = Jugador.fromJson(json.decode(response.body));
+      return jugador;
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load post');
+    }
+  }
+
+  Future<JugadorModel> obtenerJugadoresEquipo(String equipo) async {
     List<Jugador> _jugadores = [];
     var solicitudes;
     http.Response responseJugadoresEquipo = await http.post(
@@ -38,9 +59,9 @@ class ProveedorJugador {
     int statusCode = responseJugadoresEquipo.statusCode;
     if (statusCode == 200) {
       // If the call to the server was successful, parse the JSON
-      if (responseJugadoresEquipo.body.length>2) {
-        solicitudes = JugadorModel.fromJson(
-            json.decode(responseJugadoresEquipo.body));
+      if (responseJugadoresEquipo.body.length > 2) {
+        solicitudes =
+            JugadorModel.fromJson(json.decode(responseJugadoresEquipo.body));
       } else {
         solicitudes = new JugadorModel(_jugadores);
       }
@@ -60,6 +81,24 @@ class ProveedorJugador {
       },
     );
     String body = response.body;
+    if (response.statusCode == 200) {
+      return body;
+    } else {
+      throw Exception('Error al conectar con el servidor');
+    }
+  }
+
+   Future updateNumeroJugador(String id, String numero) async {
+    // make POST request
+    http.Response response = await http.post(
+      'https://futbolmx1.000webhostapp.com/app/updateNumeroJugador.php',
+      body: {
+        "Cedula": id,
+        "Numero": numero,
+      },
+    );
+    String body = response.body;
+    print(body);
     if (response.statusCode == 200) {
       return body;
     } else {

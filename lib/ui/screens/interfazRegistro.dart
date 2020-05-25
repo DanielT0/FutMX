@@ -180,30 +180,40 @@ class _interfazRegistroState extends State<interfazRegistro> {
 */
   Future anadirAdministradorEquipo(BuildContext context) async {
     // make POST request
-    var ligaSeleccionada = this._ligaseleccionada.idLiga.toString();
-    List<String> dias = [];
-    if (this.monVal) dias.add('Lunes');
-    if (this.tuVal) dias.add('Martes');
-    if (this.wedVal) dias.add('Miércoles');
-    if (this.thursVal) dias.add('Jueves');
-    if (this.friVal) dias.add('Viernes');
-    if (this.satVal) dias.add('Sábado');
-    if (this.sunVal) dias.add('Domingo');
+    if (this._ligaseleccionada == null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Se tiene que escoger una liga'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {
+      var ligaSeleccionada = this._ligaseleccionada.idLiga.toString();
+      List<String> dias = [];
+      if (this.monVal) dias.add('Lunes');
+      if (this.tuVal) dias.add('Martes');
+      if (this.wedVal) dias.add('Miércoles');
+      if (this.thursVal) dias.add('Jueves');
+      if (this.friVal) dias.add('Viernes');
+      if (this.satVal) dias.add('Sábado');
+      if (this.sunVal) dias.add('Domingo');
 
-    var stringDias = dias.toString();
-    SolicitudAdministradorEquipo adminEquipo = new SolicitudAdministradorEquipo(
-        controllerCedula.text,
-        controllerNombre.text,
-        controllerCorreo.text,
-        controllerNombreEquipo.text,
-        ligaSeleccionada,
-        stringDias,
-        controllerContrase.text);
-    this.bloc.addSolicitudAdminEquipo(adminEquipo, context).then(
-      (body) {
-        print(body);
-      },
-    );
+      var stringDias = dias.toString();
+      SolicitudAdministradorEquipo adminEquipo =
+          new SolicitudAdministradorEquipo(
+              controllerCedula.text,
+              controllerNombre.text,
+              controllerCorreo.text,
+              controllerNombreEquipo.text,
+              ligaSeleccionada,
+              stringDias,
+              controllerContrase.text);
+      this.bloc.addSolicitudAdminEquipo(adminEquipo, context).then(
+        (body) {
+          print(body);
+        },
+      );
+    }
   }
 
 // Vamos con el camino que se toma para añadir un jugador con el modelo Bloc (es un poco largo pero, vale la pena, y muuuucho) a la base de datos, al presionar el botón "Enviar solicitud", si se está en la interfaz de registro jugador, el sistema viene a este método
@@ -251,14 +261,16 @@ class _interfazRegistroState extends State<interfazRegistro> {
 
   @override
   Widget build(BuildContext context) {
-    bloc.allLigas.map((object) => object.ligas).listen((p) {    // Escuchamos al stream (que no dará dato a dato el conjunto)
-      setState(() => ligas = p);                                //Le asignamos el conjunto a ligas          
+    bloc.allLigas.map((object) => object.data.ligas).listen((p) {
+      // Escuchamos al stream (que no dará dato a dato el conjunto)
+      setState(() => ligas = p); //Le asignamos el conjunto a ligas
       print(ligas);
       print(ligas[0].nombre);
-      this._dropDownMenuItems = buildDropdownMenuItems(this.ligas);    // Le asignamos los items al dropdown
+      this._dropDownMenuItems = buildDropdownMenuItems(
+          this.ligas); // Le asignamos los items al dropdown
       _ligaseleccionada = _dropDownMenuItems[0].value;
     });
-    bloc.allLigas.map((object) => object.ligas[0].nombre).listen(print);
+    bloc.allLigas.map((object) => object.data.ligas[0].nombre).listen(print);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(title: Text('Registrarse')),
@@ -333,8 +345,8 @@ class _interfazRegistroState extends State<interfazRegistro> {
                             : <Widget>[]),
                   ],
                 ),
-                buttonSolicitud(() => enviarSolicitud(
-                    context), "Enviar solicitud"), //Llama al botón asignandole un método (función)
+                buttonSolicitud(() => enviarSolicitud(context),
+                    "Enviar solicitud"), //Llama al botón asignandole un método (función)
                 SizedBox(
                   height: 40,
                 ),

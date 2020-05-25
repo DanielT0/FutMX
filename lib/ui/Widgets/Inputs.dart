@@ -21,7 +21,7 @@ class Inputs extends StatelessWidget {
           ),
           child: Material(
             child: TextFormField(
-              validator: (value){  //El validador por el que pusimos el From, este valida que no hayan espacios vacíos o números y letras en donde no deberían
+              validator: (value){  //El validador por el que pusimos el Form, este valida que no hayan espacios vacíos o números y letras en donde no deberían
                 if(value.isEmpty){
                   return 'Por favor ingresa este dato';
                 }

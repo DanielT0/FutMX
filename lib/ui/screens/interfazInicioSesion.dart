@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:prueba_bd/ui/Widgets/buttonSolicitud.dart';
-import 'package:prueba_bd/ui/screens/principalAdmin.dart';
-import 'package:prueba_bd/ui/screens/principalJugador.dart';
+import 'package:prueba_bd/ui/screens/adminEquipo/principalAdmin.dart';
+import 'package:prueba_bd/ui/screens/jugador/principalJugador.dart';
 import '../Widgets/Inputs.dart';
 import 'package:prueba_bd/providers/estadoGlobal.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:prueba_bd/ui/Widgets/alert.dart';
 
 import 'package:prueba_bd/blocs/bloc.dart';
 import 'package:provider/provider.dart';
 
 var bloc = new Bloc();
+var alerta = new Alerta();
 final _scaffoldKey = new GlobalKey<ScaffoldState>();
+EstadoGlobal _myProvider;
 
 class interfazInicioSesion extends StatefulWidget {
   @override
@@ -17,8 +21,10 @@ class interfazInicioSesion extends StatefulWidget {
 }
 
 class _interfazInicioSesionState extends State<interfazInicioSesion> {
-  static TextEditingController controllerCorreo = new TextEditingController();
-  static TextEditingController controllerContrase = new TextEditingController();
+  static TextEditingController controllerCorreo =
+      new TextEditingController(text: '');
+  static TextEditingController controllerContrase =
+      new TextEditingController(text: '');
 
   final _inputsText = [
     {
@@ -42,45 +48,75 @@ class _interfazInicioSesionState extends State<interfazInicioSesion> {
     }
   ];
 
-  void iniciarSesion(BuildContext context) async {
-    Scaffold.of(context).showSnackBar(
+  //--------------------------- Métodos --------------------------------------
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void mostrarError() {
+    alerta.showAlert(
+        context,
+        "No eres tú, somos nosotros",
+        "Entiendo",
+        "Se ha dado un error en la conexión con el servidor, por favor, intentalo de nuevo",
+        Colors.red,
+        () {});
+  }
+
+  Future iniciarSesion(BuildContext context) async {
+    try {
+      Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text('Estableciendo conexión...'),
           backgroundColor: Colors.green,
         ),
       );
-    var resp = await bloc.iniciarSesion(
-        // En bloc pusimos que si el usuario y contraseña estaban bien se devolvía true, de lo contrario, false
-        controllerCorreo.text,
-        controllerContrase.text,
-        context);
-    if (!resp) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Usuario o contraseña incorrectos'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } else {
-      var myProvider = Provider.of<EstadoGlobal>(context, listen: false);
-      if (myProvider.tipo == "Jugador") {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) => new PrincipalJugador(),
+      var resp = await bloc.iniciarSesion(
+          // En bloc pusimos que si el usuario y contraseña estaban bien se devolvía true, de lo contrario, false
+          controllerCorreo.text,
+          controllerContrase.text,
+          context);
+      if (!resp) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Usuario o contraseña incorrectos'),
+            backgroundColor: Colors.red,
           ),
         );
       } else {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) => new PrincipalAdmin(),
-          ),
-        );
+        _myProvider.errorServidor = false;
+        if (_myProvider.tipo == "Jugador") {
+          Navigator.pushNamed(context, '/InicioSesion/PrincipalJugador');
+        } else {
+          Navigator.pushNamed(context, '/InicioSesion/PrincipalAdmin');
+        }
       }
+    } on Exception {
+      Alert(
+              context: context,
+              title: 'Uh-oh',
+              buttons: [
+                DialogButton(
+                  color: Colors.red,
+                  child: Text(
+                    'Okay',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  width: 120,
+                )
+              ],
+              type: AlertType.error,
+              desc:
+                  'Hubo un error de conexión, revisa tu conexión a internet e inténtalo de nuevo')
+          .show();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    _myProvider = Provider.of<EstadoGlobal>(context, listen: true);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(title: Text('Iniciar sesión')),

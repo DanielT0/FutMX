@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prueba_bd/Response/ApiResponse.dart';
 import 'package:prueba_bd/models/solicitudJugador.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -7,14 +8,14 @@ class SolicitudesJugadorList {
   final Function aceptarSolicitud;
 
   SolicitudesJugadorList(this.eliminarSolicitud, this.aceptarSolicitud);
-
   Widget buildList(
-      AsyncSnapshot<SolicitudJugadorModel> snapshot, BuildContext context) {
+      AsyncSnapshot<ApiResponse<SolicitudJugadorModel>> snapshot, BuildContext context) {
     return ListView.builder(
-      itemCount: snapshot.data.solicitudesJugador
+      physics: const BouncingScrollPhysics(),
+      itemCount: snapshot.data.data.solicitudesJugador
           .length, //El programa tiene que saber cuantos items ha de mostrar en la lista
       itemBuilder: (BuildContext context, int index) {
-        return Dismissible(
+        return Dismissible( //Nos permite eliminar o aceptar las solicitudes de jugador corriendolas hacia la derecha o izquierda
           // Show a red background as the item is swiped away.
           background: Container(
             color: Colors.white,
@@ -39,11 +40,11 @@ class SolicitudesJugadorList {
               ],
             ),
           ),
-          key: Key(snapshot.data.solicitudesJugador[index].cedula.toString()),
+          key: Key(snapshot.data.data.solicitudesJugador[index].cedula.toString()),
           onDismissed: (direction) {
             if (direction == DismissDirection.startToEnd) {
               this.eliminarSolicitud(
-                  snapshot.data.solicitudesJugador[index].cedula);
+                  snapshot.data.data.solicitudesJugador[index].cedula);
               return Alert(
                       context: context,
                       title: "Solicitud eliminada",
@@ -64,7 +65,7 @@ class SolicitudesJugadorList {
             }
             else {
               this.aceptarSolicitud(
-                  snapshot.data.solicitudesJugador[index].cedula);
+                  snapshot.data.data.solicitudesJugador[index].cedula);
               return Alert(
                       context: context,
                       title: "Solicitud aceptada",
@@ -103,7 +104,7 @@ class SolicitudesJugadorList {
                   Expanded(
                     child: Center(
                       child: Text(
-                        snapshot.data.solicitudesJugador[index].numero,
+                        snapshot.data.data.solicitudesJugador[index].numero,
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
@@ -118,14 +119,14 @@ class SolicitudesJugadorList {
                       Container(
                         width: MediaQuery.of(context).size.width * 0.48,
                         child: Text(
-                          snapshot.data.solicitudesJugador[index].nombre,
+                          snapshot.data.data.solicitudesJugador[index].nombre,
                           style: TextStyle(fontSize: 13),
                         ),
                       ),
                       SizedBox(
                         height: 3,
                       ),
-                      Text("ID "+snapshot.data.solicitudesJugador[index].cedula,
+                      Text("ID "+snapshot.data.data.solicitudesJugador[index].cedula,
                           style:
                               TextStyle(fontSize: 11, color: Colors.blueGrey)),
                     ],
@@ -138,7 +139,7 @@ class SolicitudesJugadorList {
                       tooltip: 'Aceptar solicitud',
                       onPressed: () {
                         this.aceptarSolicitud(
-                            snapshot.data.solicitudesJugador[index].cedula);
+                            snapshot.data.data.solicitudesJugador[index].cedula);
                         return Alert(
                                 context: context,
                                 title: "Solicitud aceptada",
@@ -156,7 +157,7 @@ class SolicitudesJugadorList {
                       tooltip: 'Eliminar solicitud',
                       onPressed: () {
                         this.eliminarSolicitud(
-                            snapshot.data.solicitudesJugador[index].cedula);
+                            snapshot.data.data.solicitudesJugador[index].cedula);
                         return Alert(
                                 context: context,
                                 title: "Solicitud eliminada",
