@@ -1,6 +1,6 @@
-# prueba_bd
+# FutMX
 
-A new Flutter project.
+Aplicación hecha en Flutter con los modelos Bloc y provider, hecha como propuesta de solución informática.
 
 ## Getting Started
 
